@@ -249,9 +249,41 @@ toggleDistrict.addEventListener('change',()=>toggleDistrict.checked?districtBoun
 togglePbt.addEventListener('change',()=>togglePbt.checked?pbtBoundaryLayer.addTo(map):map.removeLayer(pbtBoundaryLayer));
 
 const agency=document.getElementById('agency'), category=document.getElementById('category'), hierarchy=document.getElementById('hierarchy'), search=document.getElementById('search');
-function uniq(field){return [...new Set(features.map(f=>f.properties[field]).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b)));}
-function fill(sel,vals){vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});}
-fill(agency,uniq('AGENSI')); fill(category,uniq('KATEGORI')); fill(hierarchy,uniq('HIERARKI'));
+
+// Susunan filter ditetapkan mengikut struktur rasmi Dashboard Kemudahan Keselamatan.
+// `value` mesti sepadan tepat dengan nilai atribut dataset; `label` ialah teks paparan pengguna.
+const agencyOptions=[
+  {value:'PDRM',label:'PDRM'},
+  {value:'JBPM',label:'JBPM'},
+  {value:'APM',label:'APM'}
+];
+const categoryOptions=[
+  {value:'IPK',label:'IPK'},
+  {value:'BBP / Pejabat Zon',label:'BBP / Pejabat Zon'},
+  {value:'APM Negeri',label:'APM Negeri'},
+  {value:'IPD',label:'IPD'},
+  {value:'BBP',label:'BBP'},
+  {value:'APM Daerah',label:'APM Daerah'},
+  {value:'BALAI POLIS',label:'Balai Polis'},
+  {value:'BALAI POLIS MARIN',label:'Balai Polis Marin'},
+  {value:'BALAI LAPANGAN TERBANG',label:'Balai Lapangan Terbang'},
+  {value:'BALAI KOMUNITI',label:'Balai Komuniti'},
+  {value:'PONDOK POLIS',label:'Pondok Polis'},
+  {value:'POS POLIS KOMUNITI',label:'Pos Polis Komuniti'},
+  {value:'POS PENGAWAL',label:'Pos Pengawal'}
+];
+const hierarchyOptions=[
+  {value:'KONTINJEN',label:'Kontinjen'},
+  {value:'BALAI/PEJABAT ZON',label:'Balai/Pejabat Zon'},
+  {value:'NEGERI',label:'Negeri'},
+  {value:'DAERAH',label:'Daerah'},
+  {value:'BALAI',label:'Balai'},
+  {value:'BALAI/UNIT',label:'Balai/Unit'}
+];
+function fillOrdered(sel,vals){vals.forEach(item=>{const o=document.createElement('option');o.value=item.value;o.textContent=item.label;sel.appendChild(o);});}
+fillOrdered(agency,agencyOptions);
+fillOrdered(category,categoryOptions);
+fillOrdered(hierarchy,hierarchyOptions);
 function filtered(){const q=search.value.trim().toLowerCase();return features.filter(f=>{const p=f.properties;return(!agency.value||p.AGENSI===agency.value)&&(!category.value||p.KATEGORI===category.value)&&(!hierarchy.value||p.HIERARKI===hierarchy.value)&&(!q||[p.NAMA,p.ALAMAT,p.INDUK,p.ZON].some(v=>String(v||'').toLowerCase().includes(q)));});}
 function popup(p){return `<div class="pop-title">${esc(p.NAMA)}</div><div><b>${esc(p.AGENSI)}</b> · ${esc(p.KATEGORI||'-')}</div><div class="pop-muted">Hierarki: ${esc(p.HIERARKI||'-')}<br>Induk/Zon: ${esc(p.INDUK||p.ZON||'-')}<br>Alamat: ${esc(p.ALAMAT||'Tiada maklumat')}<br>Telefon: ${esc(p.TELEFON||'-')}<br>Koordinat: ${Number(p.LATITUDE).toFixed(6)}, ${Number(p.LONGITUDE).toFixed(6)}</div>`;}
 function render(){const fs=filtered(); layer.clearLayers(); const bounds=[];fs.forEach(f=>{const [lng,lat]=f.geometry.coordinates;const p=f.properties;const m=L.circleMarker([lat,lng],{radius:6,weight:1,color:'#07111f',fillColor:agencyColors[p.AGENSI]||'#aaa',fillOpacity:.92});m.bindPopup(popup(p));m.addTo(layer);bounds.push([lat,lng]);});if(fs.length&&fs.length<features.length) map.fitBounds(bounds,{padding:[30,30],maxZoom:13});document.getElementById('visibleCount').textContent=fs.length;document.getElementById('tableMeta').textContent=`${fs.length} / ${features.length} rekod`;const counts={PDRM:0,JBPM:0,APM:0};fs.forEach(f=>counts[f.properties.AGENSI]=(counts[f.properties.AGENSI]||0)+1);document.getElementById('kTotal').textContent=fs.length;document.getElementById('kPdrm').textContent=counts.PDRM||0;document.getElementById('kJbpm').textContent=counts.JBPM||0;document.getElementById('kApm').textContent=counts.APM||0;renderTable(fs);renderAnalytics(fs,counts);}
