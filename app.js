@@ -70,32 +70,55 @@ function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&l
 function num(v,d=2){const n=Number(v);return Number.isFinite(n)?n.toLocaleString('ms-MY',{maximumFractionDigits:d}):'-';}
 
 // Administrative boundary layers supplied for this dashboard.
-// V2.0 cartographic convention:
+// V2.1 label placement convention:
+//   1) For a multipart Daerah/PBT, choose the polygon component with the largest area.
+//   2) Use a precomputed interior label point (pole of inaccessibility) inside that
+//      largest polygon, instead of Leaflet's bounds-centre / multipart centroid.
+//   3) Boundary and its labels remain synchronized with the same layer checkbox.
+// Cartographic line convention remains:
 //   Daerah = bold black line + single dot (dash-dot)
 //   PBT    = light red line + double dot (dash-dot-dot)
-// Each feature carries a permanent label, which automatically follows the
-// visibility of its parent layer.
-const districtBoundaryLayer = L.geoJSON(window.SEMPADAN_DAERAH, {
+function addBoundaryLabel(feature,labelLayer,className){
+  const p=feature.properties||{};
+  const name=p.web_name||p.NAMA_DAERAH||p.DAERAH||p.NAMA_PBT||'-';
+  const lat=Number(p.web_label_lat);
+  const lon=Number(p.web_label_lon);
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)) return;
+  L.tooltip({
+    permanent:true,
+    direction:'center',
+    className:`boundary-label ${className}`,
+    pane:'boundaryLabelPane',
+    opacity:1,
+    interactive:false
+  }).setLatLng([lat,lon]).setContent(esc(name)).addTo(labelLayer);
+}
+
+const districtLabelLayer=L.layerGroup();
+const districtBoundaryGeometry = L.geoJSON(window.SEMPADAN_DAERAH, {
   pane:'districtBoundaryPane',
   style:{color:'#111111',weight:2.8,opacity:1,dashArray:'13 5 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
     const name=p.web_name||p.NAMA_DAERAH||p.DAERAH||'-';
-    lyr.bindTooltip(esc(name),{permanent:true,direction:'center',className:'boundary-label district-label',pane:'boundaryLabelPane',opacity:1});
+    addBoundaryLabel(feature,districtLabelLayer,'district-label');
     lyr.bindPopup(`<div class="pop-title">Sempadan Daerah Negeri Selangor</div><div><b>${esc(name)}</b></div><div class="pop-muted">Kod Daerah: ${esc(p.web_code||'-')}<br>Luas: ${num(p.web_area)} hektar</div>`);
   }
-}).addTo(map);
+});
+const districtBoundaryLayer=L.layerGroup([districtBoundaryGeometry,districtLabelLayer]).addTo(map);
 
-const pbtBoundaryLayer = L.geoJSON(window.SEMPADAN_PBT, {
+const pbtLabelLayer=L.layerGroup();
+const pbtBoundaryGeometry = L.geoJSON(window.SEMPADAN_PBT, {
   pane:'pbtBoundaryPane',
   style:{color:'#ff7d8a',weight:2.1,opacity:.98,dashArray:'13 5 2 4 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
     const name=p.web_name||p.NAMA_PBT||'-';
-    lyr.bindTooltip(esc(name),{permanent:true,direction:'center',className:'boundary-label pbt-label',pane:'boundaryLabelPane',opacity:1});
+    addBoundaryLabel(feature,pbtLabelLayer,'pbt-label');
     lyr.bindPopup(`<div class="pop-title">Sempadan Pihak Berkuasa Tempatan Negeri Selangor</div><div><b>${esc(name)}</b></div><div class="pop-muted">Kategori: ${esc(p.web_type||p.KATEGORI||'-')}<br>Luas: ${num(p.web_area||p.Shape_area)} hektar</div>`);
   }
-}).addTo(map);
+});
+const pbtBoundaryLayer=L.layerGroup([pbtBoundaryGeometry,pbtLabelLayer]).addTo(map);
 
 const basemapCount=document.getElementById('basemapCount');
 const basemapGalleryBtn=document.getElementById('basemapGalleryBtn');

@@ -1,12 +1,12 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V2.0
+# Dashboard Kemudahan Keselamatan Negeri Selangor V2.1
 
-## Perubahan V2.0
-- Sempadan Daerah Negeri Selangor: garis hitam pekat dengan corak line + single dot (dash-dot).
-- Sempadan Pihak Berkuasa Tempatan Negeri Selangor: garis merah muda dengan corak line + double dot (dash-dot-dot).
-- Label nama Daerah dipaparkan secara kekal apabila layer Daerah dibuka.
-- Label nama PBT dipaparkan secara kekal apabila layer PBT dibuka.
-- Menutup sesuatu layer turut menutup label layer tersebut secara automatik.
-- Popup boundary, layer toggle, basemap gallery, filter KPI Agensi dan keseluruhan fungsi V1.9 dikekalkan.
+## Perubahan V2.1
+- Kedudukan label Daerah dan PBT tidak lagi menggunakan centre/bounds bagi keseluruhan MultiPolygon.
+- Untuk setiap Daerah/PBT, sistem memilih **polygon komponen yang paling besar**.
+- Titik label dipra-kira pada **interior centre / pole of inaccessibility** polygon terbesar tersebut, supaya label berada di kawasan utama dan tidak tersangkut pada pulau/polygon kecil atau di tepi sempadan.
+- Label kekal sync dengan checkbox layer: tutup layer = sempadan dan label hilang bersama.
+- Style sempadan V2.0 dikekalkan: Daerah hitam single-dot; PBT merah muda double-dot.
+- Semua fungsi KPI/filter/map/chart/table/basemap daripada versi terdahulu dikekalkan.
 
-## Deployment GitHub Pages
-Upload/replace semua fail dalam folder ini ke root repository. `index.html` mesti berada di root. Query version `?v=2.0` digunakan untuk mengurangkan isu browser/GitHub Pages cache.
+## GitHub Pages
+Upload/replace semua fail dalam folder ini ke root repository. `index.html` mesti berada di root. Query version `?v=2.1` digunakan untuk mengurangkan isu browser/GitHub Pages cache.
