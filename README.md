@@ -1,14 +1,14 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V2.6
+# Dashboard Kemudahan Keselamatan Negeri Selangor V2.7
 
-## Perubahan V2.6
-- Skema warna keseluruhan dashboard ditukar kepada **tema terang** yang lebih harmoni dengan logo SUO baharu.
-- Latar belakang laman ditukar kepada tona **warm off-white / soft cream**.
-- Kad KPI, panel, jadual, filter dan footer menggunakan permukaan **putih cerah** dengan bayang lembut.
-- Warna aksen utama ditukar kepada **oren hangat** dan **coral** supaya lebih blend dengan warna logo SUO.
-- Header, panel lapisan peta, legend dan launcher basemap turut dicerahkan supaya keseluruhan UI nampak lebih bersih dan korporat.
-- Input filter ditambah state fokus yang lebih jelas.
-- Semua fungsi V2.5 dikekalkan.
-- Cache query dinaikkan kepada `?v=2.6`.
+## Perubahan V2.7
+- Tema website sebenar dinaik taraf kepada **Light Premium** berdasarkan mockup yang dipilih.
+- Menggunakan palet warm ivory / cream dengan aksen orange, coral dan gold yang selari dengan logo SUO.
+- Header dikemaskan dengan gradient lembut, shadow halus dan accent background yang lebih premium.
+- KPI cards, panel filter, analytics, basemap gallery dan jadual dipolish dengan radius lebih lembut serta shadow yang lebih kemas.
+- Warna nombor KPI dibezakan secara harmoni mengikut identiti visual setiap agensi.
+- Footer version badge ditukar kepada gradient orange-coral.
+- Tiada fungsi, data, filter, layer, basemap atau kedudukan label diubah.
+- Cache query dinaikkan kepada `?v=2.7`.
 
 ## GitHub Pages
-Upload/replace semua fail dalam folder ini ke root repository. `index.html` mesti berada di root. Query version `?v=2.6` digunakan untuk mengurangkan isu browser/GitHub Pages cache.
+Replace semua fail versi lama dengan kandungan folder ini. Pastikan `index.html`, `styles.css`, `app.js`, `data.js`, `boundaries.js`, folder `assets`, `data` dan `gis` kekal di root seperti struktur sedia ada.
