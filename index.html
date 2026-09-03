@@ -17,7 +17,7 @@
       <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
       <p>PDRM · Jabatan Bomba dan Penyelamat Malaysia · Angkatan Pertahanan Awam Malaysia</p>
     </div>
-    <div class="badge">V1.0 · Master 03 Sep 2026</div>
+    <div class="badge">V1.1 · Master 03 Sep 2026</div>
   </header>
 
   <main>
@@ -41,6 +41,11 @@
 
       <section class="map-wrap panel">
         <div id="map"></div>
+        <div class="map-layers" aria-label="Lapisan peta">
+          <div class="map-layers-title">Lapisan Peta</div>
+          <label><input id="toggleDistrict" type="checkbox" checked><i class="line-swatch district"></i><span>Sempadan Daerah Negeri Selangor</span></label>
+          <label><input id="togglePbt" type="checkbox" checked><i class="line-swatch pbt"></i><span>Sempadan Pihak Berkuasa Tempatan Negeri Selangor</span></label>
+        </div>
         <div class="legend">
           <span><i class="dot pdrm"></i>PDRM</span>
           <span><i class="dot jbpm"></i>JBPM</span>
@@ -63,10 +68,11 @@
     </section>
   </main>
 
-  <footer>Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Selangor Urban Observatory</footer>
+  <footer>Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Sempadan Daerah Negeri Selangor · Sempadan Pihak Berkuasa Tempatan Negeri Selangor · Selangor Urban Observatory</footer>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="data.js"></script>
+  <script src="boundaries.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
