@@ -1,32 +1,21 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V1.1
+# Dashboard Kemudahan Keselamatan Negeri Selangor V1.3
 
-Dashboard statik untuk Selangor Urban Observatory (SUO).
+Versi V1.3 menaik taraf pemilih basemap kepada **Visual Basemap Gallery** seperti pengalaman ArcGIS/Mapbox.
 
-## Kandungan V1.1
+## Kandungan utama
+- 184 kemudahan keselamatan: PDRM 137, JBPM 37, APM 10.
+- Sempadan Daerah Negeri Selangor.
+- Sempadan Pihak Berkuasa Tempatan Negeri Selangor.
+- 18 basemap tanpa project API key.
+- Thumbnail preview bagi setiap basemap.
+- Galeri 2-kolum dengan kategori dan tanda basemap aktif.
+- Filter Agensi, Kategori, Hierarki dan carian.
+- KPI, peta, popup, carta dan jadual.
 
-- 184 kemudahan keselamatan Negeri Selangor:
-  - PDRM: 137
-  - JBPM: 37
-  - APM: 10
-- Lapisan pentadbiran yang boleh dipaparkan / disembunyikan:
-  1. **Sempadan Daerah Negeri Selangor** — 9 daerah
-  2. **Sempadan Pihak Berkuasa Tempatan Negeri Selangor** — 12 PBT
-- Peta interaktif, popup, carian, filter, KPI, carta dan jadual.
-
-## Fail utama
-
-- `index.html` — halaman dashboard
-- `styles.css` — gaya dashboard
-- `app.js` — fungsi peta/dashboard
-- `data.js` — 184 titik kemudahan keselamatan
-- `boundaries.js` — dua boundary GeoJSON yang dibungkus sebagai JavaScript untuk GitHub Pages dan preview tempatan
+## Basemap
+OpenStreetMap Standard, OpenStreetMap Humanitarian, CyclOSM, OpenTopoMap, CARTO Positron, CARTO Positron No Labels, CARTO Voyager, CARTO Voyager No Labels, CARTO Dark Matter, CARTO Dark Matter No Labels, Esri World Street Map, Esri World Topographic Map, Esri World Imagery, Esri World Terrain, Esri World Physical Map, Esri Light Gray Canvas, Esri Dark Gray Canvas dan Esri World Ocean.
 
 ## GitHub Pages
+Upload semua fail dan folder dalam direktori ini ke root repository GitHub Pages. `index.html` mesti berada di root repo.
 
-Upload **semua fail di atas terus ke root repository**. GitHub Pages boleh ditetapkan kepada:
-
-- Source: Deploy from a branch
-- Branch: `main`
-- Folder: `/(root)`
-
-Versi: V1.1 — 03 September 2026.
+> Nota: basemap dan library web memerlukan sambungan internet semasa dashboard digunakan.

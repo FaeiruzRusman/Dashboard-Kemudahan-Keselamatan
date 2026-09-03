@@ -1,6 +1,105 @@
 const features = window.SAFETY_DATA.features;
 const map = L.map('map',{zoomControl:true}).setView([3.16,101.53],9);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+
+// V1.3: visual basemap gallery. All entries below work without a project API key.
+const basemapDefs = {
+  'osm-standard': {
+    label:'OpenStreetMap Standard', group:'Street',
+    url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    options:{maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}
+  },
+  'osm-humanitarian': {
+    label:'OpenStreetMap Humanitarian', group:'Street',
+    url:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    options:{maxZoom:19, attribution:'&copy; OpenStreetMap contributors, Tiles style by HOT'}
+  },
+  'cyclosm': {
+    label:'CyclOSM', group:'Street',
+    url:'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
+    options:{maxZoom:20, attribution:'&copy; OpenStreetMap contributors, CyclOSM'}
+  },
+  'opentopo': {
+    label:'OpenTopoMap', group:'Topographic',
+    url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    options:{maxZoom:17, attribution:'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'}
+  },
+  'carto-positron': {
+    label:'CARTO Positron', group:'Light',
+    url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'carto-positron-nolabels': {
+    label:'CARTO Positron — No Labels', group:'Light',
+    url:'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'carto-voyager': {
+    label:'CARTO Voyager', group:'Street',
+    url:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'carto-voyager-nolabels': {
+    label:'CARTO Voyager — No Labels', group:'Street',
+    url:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'carto-dark': {
+    label:'CARTO Dark Matter', group:'Dark',
+    url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'carto-dark-nolabels': {
+    label:'CARTO Dark Matter — No Labels', group:'Dark',
+    url:'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
+  },
+  'esri-street': {
+    label:'Esri World Street Map', group:'Esri',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-topo': {
+    label:'Esri World Topographic Map', group:'Esri',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-imagery': {
+    label:'Esri World Imagery (Satellite)', group:'Satellite',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-terrain': {
+    label:'Esri World Terrain', group:'Terrain',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}',
+    options:{maxNativeZoom:13,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-physical': {
+    label:'Esri World Physical Map', group:'Terrain',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
+    options:{maxNativeZoom:8,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-light-gray': {
+    label:'Esri Light Gray Canvas', group:'Light',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-dark-gray': {
+    label:'Esri Dark Gray Canvas', group:'Dark',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  },
+  'esri-ocean': {
+    label:'Esri World Ocean', group:'Special',
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',
+    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  }
+};
+
+const basemapLayers = Object.fromEntries(
+  Object.entries(basemapDefs).map(([id,def])=>[id,L.tileLayer(def.url,def.options)])
+);
+let activeBasemapId='carto-dark';
+let activeBasemap=basemapLayers[activeBasemapId].addTo(map);
 
 // Keep administrative boundaries below the safety facility markers.
 map.createPane('pbtBoundaryPane');
@@ -33,6 +132,113 @@ const pbtBoundaryLayer = L.geoJSON(window.SEMPADAN_PBT, {
   }
 }).addTo(map);
 
+const basemapCount=document.getElementById('basemapCount');
+const basemapGalleryBtn=document.getElementById('basemapGalleryBtn');
+const basemapGallery=document.getElementById('basemapGallery');
+const closeBasemapGallery=document.getElementById('closeBasemapGallery');
+const basemapGrid=document.getElementById('basemapGrid');
+const basemapFilters=document.getElementById('basemapFilters');
+const activeBasemapName=document.getElementById('activeBasemapName');
+const activeBasemapThumb=document.getElementById('activeBasemapThumb');
+let activeBasemapGroup='Semua';
+
+// Generate representative preview tiles centred on Selangor (z9 / x400 / y251).
+function tilePreviewUrl(def){
+  return def.url
+    .replace('{s}','a')
+    .replace('{z}','9')
+    .replace('{x}','400')
+    .replace('{y}','251')
+    .replace('{r}','');
+}
+function setThumb(el,def){
+  const url=tilePreviewUrl(def);
+  el.style.backgroundImage=`linear-gradient(rgba(7,17,31,.04),rgba(7,17,31,.04)),url("${url}")`;
+}
+function setBasemap(id){
+  if(!basemapLayers[id] || id===activeBasemapId){
+    closeGallery();
+    return;
+  }
+  map.removeLayer(activeBasemap);
+  activeBasemapId=id;
+  activeBasemap=basemapLayers[id].addTo(map);
+  activeBasemap.bringToBack();
+  updateBasemapUI();
+  closeGallery();
+}
+function updateBasemapUI(){
+  const def=basemapDefs[activeBasemapId];
+  activeBasemapName.textContent=def.label;
+  setThumb(activeBasemapThumb,def);
+  basemapGrid.querySelectorAll('.basemap-card').forEach(card=>{
+    const isActive=card.dataset.basemap===activeBasemapId;
+    card.classList.toggle('active',isActive);
+    card.setAttribute('aria-pressed',String(isActive));
+  });
+}
+function renderBasemapCards(){
+  basemapGrid.innerHTML='';
+  Object.entries(basemapDefs)
+    .filter(([,def])=>activeBasemapGroup==='Semua'||def.group===activeBasemapGroup)
+    .forEach(([id,def])=>{
+      const card=document.createElement('button');
+      card.type='button';
+      card.className='basemap-card';
+      card.dataset.basemap=id;
+      card.setAttribute('role','listitem');
+      card.setAttribute('aria-label',`Pilih ${def.label}`);
+      card.setAttribute('aria-pressed',String(id===activeBasemapId));
+      const thumb=document.createElement('span');
+      thumb.className='basemap-thumb';
+      setThumb(thumb,def);
+      const label=document.createElement('span');
+      label.className='basemap-label';
+      label.innerHTML=`<span>${esc(def.label)}</span><span class="basemap-check" aria-hidden="true">✓</span>`;
+      const group=document.createElement('small');
+      group.className='basemap-group';
+      group.textContent=def.group;
+      card.append(thumb,label,group);
+      card.addEventListener('click',()=>setBasemap(id));
+      basemapGrid.appendChild(card);
+    });
+  updateBasemapUI();
+}
+function renderBasemapFilters(){
+  const groups=['Semua',...new Set(Object.values(basemapDefs).map(d=>d.group))];
+  basemapFilters.innerHTML='';
+  groups.forEach(group=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='basemap-chip'+(group===activeBasemapGroup?' active':'');
+    btn.textContent=group;
+    btn.setAttribute('aria-pressed',String(group===activeBasemapGroup));
+    btn.addEventListener('click',()=>{
+      activeBasemapGroup=group;
+      basemapFilters.querySelectorAll('.basemap-chip').forEach(b=>{
+        const on=b.textContent===group;
+        b.classList.toggle('active',on);
+        b.setAttribute('aria-pressed',String(on));
+      });
+      renderBasemapCards();
+    });
+    basemapFilters.appendChild(btn);
+  });
+}
+function openGallery(){
+  basemapGallery.hidden=false;
+  basemapGalleryBtn.setAttribute('aria-expanded','true');
+}
+function closeGallery(){
+  basemapGallery.hidden=true;
+  basemapGalleryBtn.setAttribute('aria-expanded','false');
+}
+basemapGalleryBtn.addEventListener('click',()=>basemapGallery.hidden?openGallery():closeGallery());
+closeBasemapGallery.addEventListener('click',closeGallery);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!basemapGallery.hidden)closeGallery();});
+basemapCount.textContent=`${Object.keys(basemapDefs).length} pilihan`;
+renderBasemapFilters();
+renderBasemapCards();
 const toggleDistrict=document.getElementById('toggleDistrict');
 const togglePbt=document.getElementById('togglePbt');
 toggleDistrict.addEventListener('change',()=>toggleDistrict.checked?districtBoundaryLayer.addTo(map):map.removeLayer(districtBoundaryLayer));
