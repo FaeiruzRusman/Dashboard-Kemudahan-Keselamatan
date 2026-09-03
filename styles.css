@@ -101,50 +101,59 @@ main{padding:20px 28px 12px}
 .filters,.analytics,.table-panel{backdrop-filter:blur(8px)}
 
 
-/* V2.9 — exact SUO skyline/wave strip supplied by user */
+/* V2.11 — blended SUO skyline/wave header decoration */
 .topbar{
   min-height:122px;
   overflow:hidden;
   isolation:isolate;
-  padding-right:505px;
-  background:#fffdfa;
+  padding-right:510px;
+  background:linear-gradient(110deg,#fffdfa 0%,#fffaf5 58%,#fff7ed 100%);
 }
-.topbar::after{display:none}
+.topbar::after{
+  content:"";
+  position:absolute;
+  inset:0 0 0 auto;
+  width:48%;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(circle at 75% 48%,rgba(255,192,105,.11),transparent 42%),linear-gradient(135deg,transparent 20%,rgba(243,173,79,.045) 62%,rgba(236,120,48,.06) 100%);
+}
 .topbar::before{display:none}
 .topbar-brand{position:relative;z-index:3;max-width:100%}
 .topbar-skyline{
   position:absolute;
   right:0;
-  top:0;
-  bottom:auto;
-  z-index:1;
-  width:480px;
-  height:119px;
-  object-fit:fill;
+  top:1px;
+  z-index:2;
+  width:500px;
+  height:124px;
+  object-fit:contain;
   object-position:right top;
   pointer-events:none;
   user-select:none;
   display:block;
+  opacity:.98;
+  filter:saturate(1.02) contrast(1.01);
 }
 @media(max-width:1240px){
-  .topbar{padding-right:425px;min-height:112px}
-  .topbar-skyline{width:420px;height:104px}
+  .topbar{padding-right:430px;min-height:112px}
+  .topbar-skyline{width:425px;height:105px;top:4px}
 }
 @media(max-width:1040px){
-  .topbar{padding-right:315px;min-height:104px}
-  .topbar-skyline{width:310px;height:77px;top:12px}
+  .topbar{padding-right:320px;min-height:104px}
+  .topbar-skyline{width:315px;height:78px;top:13px}
   .topbar h1{font-size:22px}
 }
 @media(max-width:820px){
-  .topbar{padding-right:205px;min-height:96px}
-  .topbar-skyline{width:205px;height:51px;top:24px}
+  .topbar{padding-right:210px;min-height:96px}
+  .topbar-skyline{width:208px;height:52px;top:23px}
   .topbar h1{font-size:20px}
 }
 @media(max-width:720px){
   .topbar{padding-right:18px;min-height:auto;overflow:visible;background:#fffdfa}
+  .topbar::after{display:none}
   .topbar-skyline{display:none}
 }
-
 
 /* V2.10 full official agency labels in KPI cards */
 .kpi-agency small{display:block;line-height:1.25;max-width:170px}

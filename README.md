@@ -1,9 +1,12 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V2.10
+# Dashboard Kemudahan Keselamatan Negeri Selangor V2.11
 
-## Perubahan V2.10
-- Sublabel card PDRM dikekalkan sebagai **Polis Diraja Malaysia**.
-- Sublabel card JBPM ditukar kepada **Jabatan Bomba dan Penyelamat Malaysia**.
-- Sublabel card APM ditukar kepada **Angkatan Pertahanan Awam Malaysia**.
-- Pelarasan kecil dibuat pada typography sublabel supaya nama rasmi yang panjang kekal kemas dalam card.
-- Semua fungsi dan reka bentuk V2.9 dikekalkan.
-- Cache query dinaikkan kepada `?v=2.10`.
+## Perubahan V2.11
+- Header skyline kini **blend** terus dengan background, bukan lagi nampak seperti gambar rectangular.
+- Background putih/cream asal pada strip imej dibuang secara feathered/transparent.
+- Fade kiri dan bawah ditambah supaya wave + glow + skyline masuk secara semula jadi ke dalam header.
+- Tone header diselaraskan dengan warm ivory/cream theme dashboard.
+- Semua fungsi, data, filter, peta, KPI dan label V2.10 dikekalkan.
+- Cache query dinaikkan kepada `?v=2.11`.
+
+## GitHub Pages
+Replace semua fail versi lama dengan kandungan V2.11, termasuk `assets/header/suo-skyline-right.png`.
