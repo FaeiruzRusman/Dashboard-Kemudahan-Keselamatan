@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Kemudahan Keselamatan Negeri Selangor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">SELANGOR URBAN OBSERVATORY · URBAN SAFETY INTELLIGENCE</div>
+      <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
+      <p>PDRM · Jabatan Bomba dan Penyelamat Malaysia · Angkatan Pertahanan Awam Malaysia</p>
+    </div>
+    <div class="badge">V1.0 · Master 03 Sep 2026</div>
+  </header>
+
+  <main>
+    <section class="kpis">
+      <article class="kpi"><span>Jumlah Kemudahan</span><strong id="kTotal">184</strong><small>Rekod spatial</small></article>
+      <article class="kpi"><span>PDRM</span><strong id="kPdrm">137</strong><small>Polis Diraja Malaysia</small></article>
+      <article class="kpi"><span>JBPM</span><strong id="kJbpm">37</strong><small>Bomba & Penyelamat</small></article>
+      <article class="kpi"><span>APM</span><strong id="kApm">10</strong><small>Pertahanan Awam</small></article>
+    </section>
+
+    <section class="dashboard-grid">
+      <aside class="panel filters">
+        <div class="panel-title"><span>Penapisan Data</span><button id="resetBtn">Reset</button></div>
+        <label>Carian<input id="search" type="search" placeholder="Nama kemudahan / alamat..." /></label>
+        <label>Agensi<select id="agency"><option value="">Semua Agensi</option></select></label>
+        <label>Kategori<select id="category"><option value="">Semua Kategori</option></select></label>
+        <label>Hierarki<select id="hierarchy"><option value="">Semua Hierarki</option></select></label>
+        <div class="result-count"><span>Rekod dipaparkan</span><strong id="visibleCount">184</strong></div>
+        <div class="note">Koordinat marker dijana daripada centroid polygon final. CRS web: WGS84.</div>
+      </aside>
+
+      <section class="map-wrap panel">
+        <div id="map"></div>
+        <div class="legend">
+          <span><i class="dot pdrm"></i>PDRM</span>
+          <span><i class="dot jbpm"></i>JBPM</span>
+          <span><i class="dot apm"></i>APM</span>
+        </div>
+      </section>
+
+      <aside class="panel analytics">
+        <div class="panel-title">Ringkasan Analitik</div>
+        <div class="chart-box"><canvas id="agencyChart"></canvas></div>
+        <div class="top-list"><h3>Kategori Utama</h3><div id="categoryList"></div></div>
+      </aside>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-title">Senarai Kemudahan <span id="tableMeta"></span></div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Agensi</th><th>Kategori</th><th>Nama</th><th>Hierarki</th><th>Induk/Zon</th><th>Alamat</th></tr></thead><tbody id="tbody"></tbody></table>
+      </div>
+    </section>
+  </main>
+
+  <footer>Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Selangor Urban Observatory</footer>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
