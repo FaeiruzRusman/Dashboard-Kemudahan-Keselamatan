@@ -56,3 +56,15 @@ footer{padding:18px 30px 28px;color:#57718c;font-size:10px;text-align:center}.le
 .kpi-logo.pdrm-logo{padding:5px}
 @media(max-width:720px){.kpi-agency{padding-right:70px}.kpi-logo{width:48px;height:48px;right:12px;border-radius:10px;padding:5px}.kpi strong{font-size:27px}}
 @media(max-width:420px){.kpi-agency{padding-right:58px}.kpi-logo{width:42px;height:42px;right:9px}.kpi{padding-left:14px}.kpi span{font-size:11px}.kpi small{font-size:9px}}
+
+
+/* V1.9 interactive KPI agency filters */
+.kpi-filter{cursor:pointer;transition:border-color .16s ease,transform .16s ease,background .16s ease,box-shadow .16s ease}
+.kpi-filter:hover{border-color:#42617f;transform:translateY(-1px)}
+.kpi-filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.kpi-filter.active-filter{border-color:var(--accent);background:linear-gradient(180deg,rgba(18,51,67,.98),rgba(11,37,51,.98));box-shadow:0 0 0 1px rgba(56,214,189,.16),0 12px 30px rgba(0,0,0,.16)}
+.kpi-filter.active-filter::after{content:"FILTER AKTIF";position:absolute;right:14px;bottom:10px;font-size:7px;font-weight:800;letter-spacing:.08em;color:var(--accent)}
+.kpi-agency.kpi-filter.active-filter::after{right:96px}
+.kpi-filter.active-filter .kpi-logo{border-color:rgba(56,214,189,.75);box-shadow:0 0 0 2px rgba(56,214,189,.14),0 5px 16px rgba(0,0,0,.18)}
+@media(max-width:720px){.kpi-agency.kpi-filter.active-filter::after{right:72px}}
+@media(max-width:420px){.kpi-filter.active-filter::after{display:none}}
