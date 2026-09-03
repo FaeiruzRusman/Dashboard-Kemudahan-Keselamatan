@@ -1,14 +1,16 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V1.3
+# Dashboard Kemudahan Keselamatan Negeri Selangor V1.4
 
-Versi V1.3 menaik taraf pemilih basemap kepada **Visual Basemap Gallery** seperti pengalaman ArcGIS/Mapbox.
+Versi V1.4 menukar pemilih basemap kepada pengalaman yang lebih ringkas: **launcher thumbnail kecil di bahagian bawah peta seperti Google Maps**, dan apabila diklik akan membuka **Basemap Gallery bertumbnail seperti ArcGIS**.
 
 ## Kandungan utama
 - 184 kemudahan keselamatan: PDRM 137, JBPM 37, APM 10.
 - Sempadan Daerah Negeri Selangor.
 - Sempadan Pihak Berkuasa Tempatan Negeri Selangor.
 - 18 basemap tanpa project API key.
-- Thumbnail preview bagi setiap basemap.
-- Galeri 2-kolum dengan kategori dan tanda basemap aktif.
+- Butang basemap kompak di bawah kiri peta dengan thumbnail basemap aktif.
+- Galeri 3-kolum desktop / 2-kolum skrin kecil dengan kategori dan tanda basemap aktif.
+- Panel Lapisan Peta di kanan atas hanya untuk sempadan Daerah/PBT.
+- Klik di luar galeri atau tekan Esc untuk menutup galeri.
 - Filter Agensi, Kategori, Hierarki dan carian.
 - KPI, peta, popup, carta dan jadual.
 

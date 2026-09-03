@@ -1,7 +1,7 @@
 const features = window.SAFETY_DATA.features;
 const map = L.map('map',{zoomControl:true}).setView([3.16,101.53],9);
 
-// V1.3: visual basemap gallery. All entries below work without a project API key.
+// V1.4: compact Google-style basemap launcher with an ArcGIS-style visual gallery. All entries below work without a project API key.
 const basemapDefs = {
   'osm-standard': {
     label:'OpenStreetMap Standard', group:'Street',
@@ -140,6 +140,7 @@ const basemapGrid=document.getElementById('basemapGrid');
 const basemapFilters=document.getElementById('basemapFilters');
 const activeBasemapName=document.getElementById('activeBasemapName');
 const activeBasemapThumb=document.getElementById('activeBasemapThumb');
+const basemapDock=document.querySelector('.basemap-dock');
 let activeBasemapGroup='Semua';
 
 // Generate representative preview tiles centred on Selangor (z9 / x400 / y251).
@@ -170,6 +171,8 @@ function setBasemap(id){
 function updateBasemapUI(){
   const def=basemapDefs[activeBasemapId];
   activeBasemapName.textContent=def.label;
+  basemapGalleryBtn.setAttribute('aria-label',`Basemap aktif: ${def.label}. Klik untuk pilih basemap lain.`);
+  basemapGalleryBtn.title=`Basemap: ${def.label}`;
   setThumb(activeBasemapThumb,def);
   basemapGrid.querySelectorAll('.basemap-card').forEach(card=>{
     const isActive=card.dataset.basemap===activeBasemapId;
@@ -235,6 +238,7 @@ function closeGallery(){
 }
 basemapGalleryBtn.addEventListener('click',()=>basemapGallery.hidden?openGallery():closeGallery());
 closeBasemapGallery.addEventListener('click',closeGallery);
+document.addEventListener('click',e=>{if(!basemapGallery.hidden && basemapDock && !basemapDock.contains(e.target)) closeGallery();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!basemapGallery.hidden)closeGallery();});
 basemapCount.textContent=`${Object.keys(basemapDefs).length} pilihan`;
 renderBasemapFilters();

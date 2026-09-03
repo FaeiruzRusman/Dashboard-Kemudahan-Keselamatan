@@ -17,7 +17,7 @@
       <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
       <p>PDRM · Jabatan Bomba dan Penyelamat Malaysia · Angkatan Pertahanan Awam Malaysia</p>
     </div>
-    <div class="badge">V1.3 · Visual Basemap Gallery · 03 Sep 2026</div>
+    <div class="badge">V1.4 · Compact Basemap Gallery · 03 Sep 2026</div>
   </header>
 
   <main>
@@ -41,27 +41,27 @@
 
       <section class="map-wrap panel">
         <div id="map"></div>
-        <div class="map-layers" aria-label="Tetapan peta">
-          <div class="basemap-control">
-            <div class="map-layers-title map-layers-heading"><span>Basemap</span><em id="basemapCount">18 pilihan</em></div>
-            <button id="basemapGalleryBtn" class="basemap-current" type="button" aria-expanded="false" aria-controls="basemapGallery">
-              <span id="activeBasemapThumb" class="basemap-current-thumb" aria-hidden="true"></span>
-              <span class="basemap-current-copy"><small>Basemap aktif</small><strong id="activeBasemapName">CARTO Dark Matter</strong></span>
-              <span class="basemap-chevron" aria-hidden="true">▾</span>
-            </button>
-          </div>
+        <div class="map-layers" aria-label="Lapisan peta">
+          <div class="map-layers-title boundary-heading">Lapisan Peta</div>
+          <label class="layer-toggle"><input id="toggleDistrict" type="checkbox" checked><i class="line-swatch district"></i><span>Sempadan Daerah Negeri Selangor</span></label>
+          <label class="layer-toggle"><input id="togglePbt" type="checkbox" checked><i class="line-swatch pbt"></i><span>Sempadan Pihak Berkuasa Tempatan Negeri Selangor</span></label>
+        </div>
+
+        <div class="basemap-dock">
+          <button id="basemapGalleryBtn" class="basemap-launcher" type="button" aria-expanded="false" aria-controls="basemapGallery" title="Pilih basemap">
+            <span id="activeBasemapThumb" class="basemap-launcher-thumb" aria-hidden="true"></span>
+            <span class="basemap-launcher-name" id="activeBasemapName">CARTO Dark Matter</span>
+          </button>
           <div id="basemapGallery" class="basemap-gallery" hidden>
             <div class="basemap-gallery-head">
-              <div><strong>Basemap Gallery</strong><span>Pilih gaya peta</span></div>
+              <div><strong>Basemap</strong><span><em id="basemapCount">18 pilihan</em> · pilih gaya peta</span></div>
               <button id="closeBasemapGallery" type="button" aria-label="Tutup galeri basemap">×</button>
             </div>
             <div id="basemapFilters" class="basemap-filters" aria-label="Kategori basemap"></div>
             <div id="basemapGrid" class="basemap-grid" role="list"></div>
           </div>
-          <div class="map-layers-title boundary-heading">Lapisan Peta</div>
-          <label class="layer-toggle"><input id="toggleDistrict" type="checkbox" checked><i class="line-swatch district"></i><span>Sempadan Daerah Negeri Selangor</span></label>
-          <label class="layer-toggle"><input id="togglePbt" type="checkbox" checked><i class="line-swatch pbt"></i><span>Sempadan Pihak Berkuasa Tempatan Negeri Selangor</span></label>
         </div>
+
         <div class="legend">
           <span><i class="dot pdrm"></i>PDRM</span>
           <span><i class="dot jbpm"></i>JBPM</span>
