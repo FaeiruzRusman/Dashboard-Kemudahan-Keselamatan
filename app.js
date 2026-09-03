@@ -98,7 +98,7 @@ const basemapDefs = {
 const basemapLayers = Object.fromEntries(
   Object.entries(basemapDefs).map(([id,def])=>[id,L.tileLayer(def.url,def.options)])
 );
-let activeBasemapId='carto-dark';
+let activeBasemapId='osm-standard';
 let activeBasemap=basemapLayers[activeBasemapId].addTo(map);
 
 // Keep administrative boundaries below the safety facility markers.

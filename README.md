@@ -1,6 +1,9 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V1.5
+# Dashboard Kemudahan Keselamatan Negeri Selangor V1.6
 
-Versi V1.5 mengekalkan Compact Basemap Gallery V1.4 dan menetapkan **susunan dropdown Agensi, Kategori dan Hierarki** mengikut struktur rasmi dashboard. Nilai paparan menggunakan format nama yang kemas, manakala nilai filter kekal sepadan dengan atribut asal dataset.
+## Default Basemap
+Dashboard kini dibuka menggunakan **OpenStreetMap Standard** sebagai basemap lalai. Semua pilihan basemap lain dalam Compact Basemap Gallery masih dikekalkan dan boleh dipilih oleh pengguna.
+
+Versi V1.6 mengekalkan Compact Basemap Gallery V1.4 dan menetapkan **susunan dropdown Agensi, Kategori dan Hierarki** mengikut struktur rasmi dashboard. Nilai paparan menggunakan format nama yang kemas, manakala nilai filter kekal sepadan dengan atribut asal dataset.
 
 ## Kandungan utama
 - 184 kemudahan keselamatan: PDRM 137, JBPM 37, APM 10.
