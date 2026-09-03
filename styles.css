@@ -145,3 +145,7 @@ main{padding:20px 28px 12px}
   .topbar-skyline{display:none}
 }
 
+
+/* V2.10 full official agency labels in KPI cards */
+.kpi-agency small{display:block;line-height:1.25;max-width:170px}
+@media(max-width:720px){.kpi-agency small{max-width:135px;font-size:9px}}
