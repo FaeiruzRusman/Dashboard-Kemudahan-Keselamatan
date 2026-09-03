@@ -76,3 +76,12 @@ footer{padding:18px 30px 28px;color:#57718c;font-size:10px;text-align:center}.le
 .leaflet-tooltip.district-label{background:rgba(255,255,255,.86);color:#374151;font-size:10.5px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;max-width:120px}
 .leaflet-tooltip.pbt-label{background:rgba(255,248,249,.88);color:#5b6470;font-size:8.5px;font-weight:750;max-width:145px}
 @media(max-width:720px){.leaflet-tooltip.district-label{font-size:9px;max-width:105px}.leaflet-tooltip.pbt-label{font-size:7.5px;max-width:125px}}
+
+/* V2.3 SUO header branding */
+.topbar-brand{display:flex;align-items:center;gap:15px;min-width:0}
+.suo-header-logo{width:68px;height:68px;flex:0 0 68px;object-fit:contain;display:block;border-radius:10px;background:#000}
+.topbar-copy{min-width:0}
+.topbar-copy .eyebrow{margin-bottom:5px}
+.topbar-copy h1{margin:0}
+@media(max-width:720px){.topbar-brand{gap:11px}.suo-header-logo{width:54px;height:54px;flex-basis:54px;border-radius:8px}.topbar-copy .eyebrow{font-size:9px;line-height:1.35;letter-spacing:.11em}.topbar-copy h1{font-size:19px;line-height:1.2}}
+@media(max-width:420px){.suo-header-logo{width:46px;height:46px;flex-basis:46px}.topbar-copy .eyebrow{font-size:8px}.topbar-copy h1{font-size:17px}}

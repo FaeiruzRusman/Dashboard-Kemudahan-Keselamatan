@@ -1,6 +1,6 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V2.2
+# Dashboard Kemudahan Keselamatan Negeri Selangor V2.3
 
-## Perubahan V2.2
+## Perubahan V2.3
 - Sempadan Daerah ditukar kepada dark grey `#4B5563`, lebih lembut dan kurang menonjol.
 - Sempadan PBT ditukar kepada shade dark grey yang sedikit lebih cerah `#6B7280`.
 - Corak line + single-dot (Daerah) dan line + double-dot (PBT) dikekalkan.
@@ -9,3 +9,10 @@
 
 ## GitHub Pages
 Upload/replace semua fail dalam folder ini ke root repository. `index.html` mesti berada di root. Query version `?v=2.2` digunakan untuk mengurangkan isu browser/GitHub Pages cache.
+
+
+## V2.3
+- Logo Selangor Urban Observatory ditambah di sebelah kiri tajuk dashboard.
+- Subtitle agensi di bawah tajuk dibuang untuk header yang lebih kemas.
+- Teks kecil “SELANGOR URBAN OBSERVATORY · URBAN SAFETY INTELLIGENCE” dikekalkan.
+- Semua fungsi, dataset, filter, basemap, sempadan dan label V2.2 dikekalkan.
