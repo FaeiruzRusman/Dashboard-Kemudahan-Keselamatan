@@ -1,105 +1,57 @@
 const features = window.SAFETY_DATA.features;
 const map = L.map('map',{zoomControl:true}).setView([3.16,101.53],9);
 
-// V1.4: compact Google-style basemap launcher with an ArcGIS-style visual gallery. All entries below work without a project API key.
+// V1.7: keyless basemap gallery. Default is always OpenStreetMap Standard.
+// Only public raster tile services that do not require an API key are listed here.
 const basemapDefs = {
   'osm-standard': {
     label:'OpenStreetMap Standard', group:'Street',
-    url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     options:{maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}
   },
   'osm-humanitarian': {
     label:'OpenStreetMap Humanitarian', group:'Street',
     url:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    options:{maxZoom:19, attribution:'&copy; OpenStreetMap contributors, Tiles style by HOT'}
+    options:{subdomains:'abc',maxZoom:19, attribution:'&copy; OpenStreetMap contributors, Tiles style by HOT'}
+  },
+  'osm-france': {
+    label:'OpenStreetMap France', group:'Street',
+    url:'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+    options:{subdomains:'abc',maxZoom:20, attribution:'&copy; OpenStreetMap contributors, OSM France'}
+  },
+  'osm-de': {
+    label:'OpenStreetMap DE', group:'Street',
+    url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+    options:{maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}
   },
   'cyclosm': {
-    label:'CyclOSM', group:'Street',
+    label:'CyclOSM', group:'Cycling',
     url:'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
-    options:{maxZoom:20, attribution:'&copy; OpenStreetMap contributors, CyclOSM'}
+    options:{subdomains:'abc',maxZoom:20, attribution:'&copy; OpenStreetMap contributors, CyclOSM'}
+  },
+  'cyclosm-lite': {
+    label:'CyclOSM Lite', group:'Cycling',
+    url:'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm-lite/{z}/{x}/{y}.png',
+    options:{subdomains:'abc',maxZoom:20, attribution:'&copy; OpenStreetMap contributors, CyclOSM'}
   },
   'opentopo': {
     label:'OpenTopoMap', group:'Topographic',
     url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    options:{maxZoom:17, attribution:'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'}
+    options:{subdomains:'abc',maxZoom:17, attribution:'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'}
   },
-  'carto-positron': {
-    label:'CARTO Positron', group:'Light',
-    url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'carto-positron-nolabels': {
-    label:'CARTO Positron — No Labels', group:'Light',
-    url:'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'carto-voyager': {
-    label:'CARTO Voyager', group:'Street',
-    url:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'carto-voyager-nolabels': {
-    label:'CARTO Voyager — No Labels', group:'Street',
-    url:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'carto-dark': {
-    label:'CARTO Dark Matter', group:'Dark',
-    url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'carto-dark-nolabels': {
-    label:'CARTO Dark Matter — No Labels', group:'Dark',
-    url:'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
-    options:{subdomains:'abcd',maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}
-  },
-  'esri-street': {
-    label:'Esri World Street Map', group:'Esri',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-topo': {
-    label:'Esri World Topographic Map', group:'Esri',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-imagery': {
-    label:'Esri World Imagery (Satellite)', group:'Satellite',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    options:{maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-terrain': {
-    label:'Esri World Terrain', group:'Terrain',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}',
-    options:{maxNativeZoom:13,maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-physical': {
-    label:'Esri World Physical Map', group:'Terrain',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
-    options:{maxNativeZoom:8,maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-light-gray': {
-    label:'Esri Light Gray Canvas', group:'Light',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-dark-gray': {
-    label:'Esri Dark Gray Canvas', group:'Dark',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
-  },
-  'esri-ocean': {
-    label:'Esri World Ocean', group:'Special',
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',
-    options:{maxNativeZoom:16,maxZoom:19, attribution:'Tiles &copy; Esri'}
+  'opnvkarte': {
+    label:'ÖPNVKarte', group:'Transport',
+    url:'https://tile.memomaps.de/tilegen/{z}/{x}/{y}.png',
+    options:{maxZoom:18, attribution:'Map data &copy; OpenStreetMap contributors | ÖPNVKarte'}
   }
 };
 
 const basemapLayers = Object.fromEntries(
   Object.entries(basemapDefs).map(([id,def])=>[id,L.tileLayer(def.url,def.options)])
 );
-let activeBasemapId='osm-standard';
-let activeBasemap=basemapLayers[activeBasemapId].addTo(map);
+const DEFAULT_BASEMAP_ID='osm-standard';
+let activeBasemapId=DEFAULT_BASEMAP_ID;
+let activeBasemap=basemapLayers[DEFAULT_BASEMAP_ID].addTo(map);
 
 // Keep administrative boundaries below the safety facility markers.
 map.createPane('pbtBoundaryPane');

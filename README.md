@@ -1,9 +1,9 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V1.6
+# Dashboard Kemudahan Keselamatan Negeri Selangor V1.7
 
 ## Default Basemap
 Dashboard kini dibuka menggunakan **OpenStreetMap Standard** sebagai basemap lalai. Semua pilihan basemap lain dalam Compact Basemap Gallery masih dikekalkan dan boleh dipilih oleh pengguna.
 
-Versi V1.6 mengekalkan Compact Basemap Gallery V1.4 dan menetapkan **susunan dropdown Agensi, Kategori dan Hierarki** mengikut struktur rasmi dashboard. Nilai paparan menggunakan format nama yang kemas, manakala nilai filter kekal sepadan dengan atribut asal dataset.
+Versi V1.7 mengekalkan Compact Basemap Gallery V1.4 dan menetapkan **susunan dropdown Agensi, Kategori dan Hierarki** mengikut struktur rasmi dashboard. Nilai paparan menggunakan format nama yang kemas, manakala nilai filter kekal sepadan dengan atribut asal dataset.
 
 ## Kandungan utama
 - 184 kemudahan keselamatan: PDRM 137, JBPM 37, APM 10.
@@ -24,3 +24,23 @@ OpenStreetMap Standard, OpenStreetMap Humanitarian, CyclOSM, OpenTopoMap, CARTO 
 Upload semua fail dan folder dalam direktori ini ke root repository GitHub Pages. `index.html` mesti berada di root repo.
 
 > Nota: basemap dan library web memerlukan sambungan internet semasa dashboard digunakan.
+
+
+## V1.7 — Keyless basemaps
+
+Basemap default ialah **OpenStreetMap Standard**. Semua basemap CARTO dan pilihan lain yang memerlukan API key/token telah dibuang daripada galeri.
+
+Pilihan basemap V1.7 (tanpa API key):
+
+1. OpenStreetMap Standard (default)
+2. OpenStreetMap Humanitarian
+3. OpenStreetMap France
+4. OpenStreetMap DE
+5. CyclOSM
+6. CyclOSM Lite
+7. OpenTopoMap
+8. ÖPNVKarte
+
+Fail CSS/JS/data menggunakan query versi `?v=1.7` untuk mengurangkan masalah cache selepas deploy ke GitHub Pages.
+
+Nota: Tile server komuniti mempunyai polisi penggunaan masing-masing. Untuk trafik awam berskala besar, pertimbangkan tile hosting sendiri atau penyedia yang mempunyai SLA.
