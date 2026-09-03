@@ -53,11 +53,15 @@ const DEFAULT_BASEMAP_ID='osm-standard';
 let activeBasemapId=DEFAULT_BASEMAP_ID;
 let activeBasemap=basemapLayers[DEFAULT_BASEMAP_ID].addTo(map);
 
-// Keep administrative boundaries below the safety facility markers.
+// Keep administrative boundaries below the safety facility markers, while labels
+// remain clearly readable above the map symbols.
 map.createPane('pbtBoundaryPane');
 map.getPane('pbtBoundaryPane').style.zIndex = 350;
 map.createPane('districtBoundaryPane');
 map.getPane('districtBoundaryPane').style.zIndex = 360;
+map.createPane('boundaryLabelPane');
+map.getPane('boundaryLabelPane').style.zIndex = 625;
+map.getPane('boundaryLabelPane').style.pointerEvents = 'none';
 
 const agencyColors={PDRM:'#4da3ff',JBPM:'#ff6c67',APM:'#ffc857'};
 let layer=L.layerGroup().addTo(map); let chart;
@@ -66,21 +70,30 @@ function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&l
 function num(v,d=2){const n=Number(v);return Number.isFinite(n)?n.toLocaleString('ms-MY',{maximumFractionDigits:d}):'-';}
 
 // Administrative boundary layers supplied for this dashboard.
+// V2.0 cartographic convention:
+//   Daerah = bold black line + single dot (dash-dot)
+//   PBT    = light red line + double dot (dash-dot-dot)
+// Each feature carries a permanent label, which automatically follows the
+// visibility of its parent layer.
 const districtBoundaryLayer = L.geoJSON(window.SEMPADAN_DAERAH, {
   pane:'districtBoundaryPane',
-  style:{color:'#38d6bd',weight:2.4,opacity:.95,fillOpacity:0},
+  style:{color:'#111111',weight:2.8,opacity:1,dashArray:'13 5 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
-    lyr.bindPopup(`<div class="pop-title">Sempadan Daerah Negeri Selangor</div><div><b>${esc(p.web_name||'-')}</b></div><div class="pop-muted">Kod Daerah: ${esc(p.web_code||'-')}<br>Luas: ${num(p.web_area)} hektar</div>`);
+    const name=p.web_name||p.NAMA_DAERAH||p.DAERAH||'-';
+    lyr.bindTooltip(esc(name),{permanent:true,direction:'center',className:'boundary-label district-label',pane:'boundaryLabelPane',opacity:1});
+    lyr.bindPopup(`<div class="pop-title">Sempadan Daerah Negeri Selangor</div><div><b>${esc(name)}</b></div><div class="pop-muted">Kod Daerah: ${esc(p.web_code||'-')}<br>Luas: ${num(p.web_area)} hektar</div>`);
   }
 }).addTo(map);
 
 const pbtBoundaryLayer = L.geoJSON(window.SEMPADAN_PBT, {
   pane:'pbtBoundaryPane',
-  style:{color:'#ffc857',weight:1.5,opacity:.88,dashArray:'6 5',fillOpacity:0},
+  style:{color:'#ff7d8a',weight:2.1,opacity:.98,dashArray:'13 5 2 4 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
-    lyr.bindPopup(`<div class="pop-title">Sempadan Pihak Berkuasa Tempatan Negeri Selangor</div><div><b>${esc(p.web_name||p.NAMA_PBT||'-')}</b></div><div class="pop-muted">Kategori: ${esc(p.web_type||p.KATEGORI||'-')}<br>Luas: ${num(p.web_area||p.Shape_area)} hektar</div>`);
+    const name=p.web_name||p.NAMA_PBT||'-';
+    lyr.bindTooltip(esc(name),{permanent:true,direction:'center',className:'boundary-label pbt-label',pane:'boundaryLabelPane',opacity:1});
+    lyr.bindPopup(`<div class="pop-title">Sempadan Pihak Berkuasa Tempatan Negeri Selangor</div><div><b>${esc(name)}</b></div><div class="pop-muted">Kategori: ${esc(p.web_type||p.KATEGORI||'-')}<br>Luas: ${num(p.web_area||p.Shape_area)} hektar</div>`);
   }
 }).addTo(map);
 
