@@ -1,4 +1,11 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V2.4
+# Dashboard Kemudahan Keselamatan Negeri Selangor V2.5
+
+## Perubahan V2.5
+- Label versi dibuang dari header kanan atas.
+- Versi dashboard dipindahkan ke footer di bahagian bawah.
+- Footer memaparkan `V2.5 · 03 Sep 2026` secara ringkas.
+- Semua fungsi dan kandungan V2.4 dikekalkan.
+- Cache query dinaikkan kepada `?v=2.5`.
 
 ## Perubahan V2.4
 - Sempadan Daerah ditukar kepada dark grey `#4B5563`, lebih lembut dan kurang menonjol.
