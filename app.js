@@ -97,7 +97,7 @@ function addBoundaryLabel(feature,labelLayer,className){
 const districtLabelLayer=L.layerGroup();
 const districtBoundaryGeometry = L.geoJSON(window.SEMPADAN_DAERAH, {
   pane:'districtBoundaryPane',
-  style:{color:'#111111',weight:2.8,opacity:1,dashArray:'13 5 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
+  style:{color:'#4b5563',weight:2.2,opacity:.88,dashArray:'13 5 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
     const name=p.web_name||p.NAMA_DAERAH||p.DAERAH||'-';
@@ -110,7 +110,7 @@ const districtBoundaryLayer=L.layerGroup([districtBoundaryGeometry,districtLabel
 const pbtLabelLayer=L.layerGroup();
 const pbtBoundaryGeometry = L.geoJSON(window.SEMPADAN_PBT, {
   pane:'pbtBoundaryPane',
-  style:{color:'#ff7d8a',weight:2.1,opacity:.98,dashArray:'13 5 2 4 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
+  style:{color:'#6b7280',weight:1.9,opacity:.82,dashArray:'13 5 2 4 2 5',lineCap:'round',lineJoin:'round',fillOpacity:0},
   onEachFeature:(feature, lyr)=>{
     const p=feature.properties||{};
     const name=p.web_name||p.NAMA_PBT||'-';
