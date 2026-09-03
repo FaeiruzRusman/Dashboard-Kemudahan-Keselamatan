@@ -48,3 +48,11 @@ footer{padding:18px 30px 28px;color:#57718c;font-size:10px;text-align:center}.le
 @media(max-width:1050px){.dashboard-grid{grid-template-columns:220px 1fr;height:auto}.analytics{grid-column:1/-1}.chart-box{height:240px}.map-wrap{height:520px}.kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.topbar{align-items:flex-start;gap:14px}.badge{display:none}main{padding:14px}.kpis{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.map-wrap{height:500px}.topbar h1{font-size:20px}.topbar{padding:18px}.filters,.analytics{padding:14px}.map-layers{width:272px;max-width:calc(100% - 24px)}.basemap-gallery{width:390px;max-width:calc(100vw - 52px)}.basemap-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-height:320px}.layer-toggle{font-size:9.5px}}
 @media(max-width:520px){.basemap-gallery{width:calc(100vw - 40px);max-width:none}.basemap-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:300px}.legend{left:106px;max-width:calc(100% - 118px);gap:7px;padding:7px;font-size:8.5px}.basemap-launcher{width:82px;height:64px}}
+
+/* V1.8 agency identity logos on KPI cards */
+.kpi{position:relative;overflow:hidden}
+.kpi-agency{padding-right:92px}
+.kpi-logo{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:62px;height:62px;object-fit:contain;object-position:center;padding:6px;background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.18);border-radius:12px;box-shadow:0 5px 16px rgba(0,0,0,.18)}
+.kpi-logo.pdrm-logo{padding:5px}
+@media(max-width:720px){.kpi-agency{padding-right:70px}.kpi-logo{width:48px;height:48px;right:12px;border-radius:10px;padding:5px}.kpi strong{font-size:27px}}
+@media(max-width:420px){.kpi-agency{padding-right:58px}.kpi-logo{width:42px;height:42px;right:9px}.kpi{padding-left:14px}.kpi span{font-size:11px}.kpi small{font-size:9px}}

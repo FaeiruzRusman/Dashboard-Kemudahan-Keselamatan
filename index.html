@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=1.7" />
+  <link rel="stylesheet" href="styles.css?v=1.8" />
 </head>
 <body>
   <header class="topbar">
@@ -17,15 +17,15 @@
       <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
       <p>PDRM · Jabatan Bomba dan Penyelamat Malaysia · Angkatan Pertahanan Awam Malaysia</p>
     </div>
-    <div class="badge">V1.7 · Keyless Basemaps · 03 Sep 2026</div>
+    <div class="badge">V1.8 · Agency Logos · 03 Sep 2026</div>
   </header>
 
   <main>
     <section class="kpis">
       <article class="kpi"><span>Jumlah Kemudahan</span><strong id="kTotal">184</strong><small>Rekod spatial</small></article>
-      <article class="kpi"><span>PDRM</span><strong id="kPdrm">137</strong><small>Polis Diraja Malaysia</small></article>
-      <article class="kpi"><span>JBPM</span><strong id="kJbpm">37</strong><small>Bomba & Penyelamat</small></article>
-      <article class="kpi"><span>APM</span><strong id="kApm">10</strong><small>Pertahanan Awam</small></article>
+      <article class="kpi kpi-agency"><img class="kpi-logo pdrm-logo" src="assets/logos/pdrm.png" alt="Logo Polis Diraja Malaysia"><span>PDRM</span><strong id="kPdrm">137</strong><small>Polis Diraja Malaysia</small></article>
+      <article class="kpi kpi-agency"><img class="kpi-logo" src="assets/logos/jbpm.png" alt="Logo Jabatan Bomba dan Penyelamat Malaysia"><span>JBPM</span><strong id="kJbpm">37</strong><small>Bomba & Penyelamat</small></article>
+      <article class="kpi kpi-agency"><img class="kpi-logo" src="assets/logos/apm.png" alt="Logo Angkatan Pertahanan Awam Malaysia"><span>APM</span><strong id="kApm">10</strong><small>Pertahanan Awam</small></article>
     </section>
 
     <section class="dashboard-grid">
@@ -87,8 +87,8 @@
   <footer>Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Sempadan Daerah Negeri Selangor · Sempadan Pihak Berkuasa Tempatan Negeri Selangor · Selangor Urban Observatory</footer>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="data.js?v=1.7"></script>
-  <script src="boundaries.js?v=1.7"></script>
-  <script src="app.js?v=1.7"></script>
+  <script src="data.js?v=1.8"></script>
+  <script src="boundaries.js?v=1.8"></script>
+  <script src="app.js?v=1.8"></script>
 </body>
 </html>
