@@ -307,3 +307,15 @@ function render(){const fs=filtered(); layer.clearLayers(); const bounds=[];fs.f
 function renderTable(fs){const tb=document.getElementById('tbody');tb.innerHTML=fs.slice(0,250).map(f=>{const p=f.properties;return `<tr><td>${esc(p.AGENSI)}</td><td>${esc(p.KATEGORI||'-')}</td><td>${esc(p.NAMA)}</td><td>${esc(p.HIERARKI||'-')}</td><td>${esc(p.INDUK||p.ZON||'-')}</td><td>${esc(p.ALAMAT||'-')}</td></tr>`}).join('');}
 function renderAnalytics(fs,counts){const ctx=document.getElementById('agencyChart'); if(chart) chart.destroy();chart=new Chart(ctx,{type:'doughnut',data:{labels:['PDRM','JBPM','APM'],datasets:[{data:[counts.PDRM||0,counts.JBPM||0,counts.APM||0],backgroundColor:[agencyColors.PDRM,agencyColors.JBPM,agencyColors.APM],borderColor:'#10243a',borderWidth:3}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#b8cadb',boxWidth:10,font:{size:10}}}}}});const cc={};fs.forEach(f=>{const c=f.properties.KATEGORI||'Tidak Dinyatakan';cc[c]=(cc[c]||0)+1});document.getElementById('categoryList').innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([k,v])=>`<div class="cat-row"><span>${esc(k)}</span><strong>${v}</strong></div>`).join('');}
 [agency,category,hierarchy].forEach(el=>el.addEventListener('change',render));search.addEventListener('input',render);document.getElementById('resetBtn').addEventListener('click',()=>{agency.value='';category.value='';hierarchy.value='';search.value='';map.setView([3.16,101.53],9);render();});render();
+
+
+// V3.1 module navigation. Coverage Analysis tab is prepared as the next workspace;
+// for now both tabs keep the existing dashboard visible while the navigation state is selectable.
+const moduleTabs = document.querySelectorAll('.module-tab');
+moduleTabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    moduleTabs.forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected','true');
+  });
+});

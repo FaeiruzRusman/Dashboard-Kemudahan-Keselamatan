@@ -1,3 +1,12 @@
+# Dashboard Kemudahan Keselamatan Negeri Selangor V3.1
+
+## Perubahan V3.1
+- Menambah navigation bar di bawah KPI card mengikut gaya mockup SUO.
+- Tab `Overview` dan `Coverage Analysis`.
+- Gaya segmented/pill dengan icon, outline oren dan active state.
+- Responsive untuk desktop dan mobile.
+- Semua fungsi V3.0 dikekalkan.
+
 # Dashboard Kemudahan Keselamatan Negeri Selangor V3.0
 
 ## Perubahan V3.0
