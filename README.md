@@ -1,26 +1,17 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V3.1
+# Dashboard Kemudahan Keselamatan Negeri Selangor V3.2
 
-## Perubahan V3.1
-- Menambah navigation bar di bawah KPI card mengikut gaya mockup SUO.
-- Tab `Overview` dan `Coverage Analysis`.
-- Gaya segmented/pill dengan icon, outline oren dan active state.
-- Responsive untuk desktop dan mobile.
-- Semua fungsi V3.0 dikekalkan.
+## Coverage Analysis berfungsi
+- Tab `Coverage Analysis` kini membuka workspace sebenar.
+- Pilih Agensi dan Kemudahan.
+- Pilih zon 5 / 10 / 15 minit dan tekan `Run Coverage`.
+- Peta menjana zon liputan indikatif dan menandakan kemudahan dipilih.
+- Sistem mengira keluasan coverage dan mengenal pasti Daerah serta PBT yang bersilang dengan zon liputan.
+- Ringkasan kanan memaparkan luas, bilangan Daerah/PBT, carta keluasan mengikut masa dan senarai kawasan terlibat.
+- Jadual bawah memaparkan semua Daerah/PBT yang terlibat.
+- Pilihan `Gabung liputan semua kemudahan agensi` disediakan untuk analisis seluruh agensi.
 
-# Dashboard Kemudahan Keselamatan Negeri Selangor V3.0
-
-## Perubahan V3.0
-- KPI cards direka semula kepada gaya **compact enterprise dashboard**.
-- Logo/icon setiap KPI ditempatkan dalam kotak kecil berasingan di sebelah kiri.
-- Nombor KPI dibesarkan dan diberi hierarki visual yang lebih jelas.
-- Nama rasmi agensi dipaparkan di bawah nombor:
-  - Polis Diraja Malaysia
-  - Jabatan Bomba dan Penyelamat Malaysia
-  - Angkatan Pertahanan Awam Malaysia
-- Kad "Jumlah Kemudahan" menggunakan ikon kemudahan geospatial tersendiri.
-- Interaksi klik KPI untuk menapis Agensi dikekalkan.
-- Semua fungsi, data, map, layer, label dan visual V2.11 dikekalkan.
-- Cache query dinaikkan kepada `?v=3.0`.
+## Nota metodologi penting
+V3.2 ialah implementasi **tanpa API key** untuk GitHub Pages. Zon 5/10/15 minit menggunakan proksi jarak driving (2.5 / 5.0 / 7.5 km) dan bukan network service area / masa respons sebenar. Struktur kod disediakan supaya enjin ini boleh diganti dengan Valhalla / Network Engine SUO kemudian tanpa perlu redesign UI.
 
 ## GitHub Pages
-Replace semua fail versi lama dengan kandungan folder ini. Pastikan `index.html` berada di root repository dan folder `assets/`, `data/`, serta `gis/` turut dimuat naik.
+Upload/replace semua fail ke root repository. `index.html` mesti berada di root. Cache version telah dinaikkan kepada `?v=3.2`.

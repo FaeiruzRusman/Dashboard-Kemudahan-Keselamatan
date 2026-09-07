@@ -8,18 +8,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=3.1" />
+  <link rel="stylesheet" href="styles.css?v=3.2" />
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-brand">
-      <img class="suo-header-logo" src="assets/logos/suo.png?v=3.1" alt="Logo Selangor Urban Observatory">
+      <img class="suo-header-logo" src="assets/logos/suo.png?v=3.2" alt="Logo Selangor Urban Observatory">
       <div class="topbar-copy">
         <div class="eyebrow">SELANGOR URBAN OBSERVATORY · URBAN SAFETY INTELLIGENCE</div>
         <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
       </div>
     </div>
-    <img class="topbar-skyline" src="assets/header/suo-skyline-right.png?v=3.1" alt="" aria-hidden="true">
+    <img class="topbar-skyline" src="assets/header/suo-skyline-right.png?v=3.2" alt="" aria-hidden="true">
   </header>
 
   <main>
@@ -56,7 +56,7 @@
     </nav>
 
     <section class="dashboard-grid">
-      <aside class="panel filters">
+      <aside class="panel filters overview-only" id="overviewFilters">
         <div class="panel-title"><span>Penapisan Data</span><button id="resetBtn">Reset</button></div>
         <label>Carian<input id="search" type="search" placeholder="Nama kemudahan / alamat..." /></label>
         <label>Agensi<select id="agency"><option value="">Semua Agensi</option></select></label>
@@ -66,12 +66,35 @@
         <div class="note">Koordinat marker dijana daripada centroid polygon final. CRS web: WGS84.</div>
       </aside>
 
+      <aside class="panel coverage-controls coverage-only" id="coverageControls" hidden>
+        <div class="coverage-title"><span class="coverage-title-icon">◎</span><div><strong>Coverage Analysis</strong><small>Analisis liputan indikatif kemudahan keselamatan</small></div></div>
+        <label>Agensi<select id="coverageAgency"></select></label>
+        <label>Kemudahan<select id="coverageFacility"></select></label>
+        <label>Mod Analisis<select id="coverageMode"><option value="drive">Driving · Anggaran jarak</option></select></label>
+        <fieldset class="coverage-times"><legend>Masa Liputan</legend>
+          <label class="time-chip time-5"><input id="cov5" type="checkbox" checked><span>5 min</span></label>
+          <label class="time-chip time-10"><input id="cov10" type="checkbox" checked><span>10 min</span></label>
+          <label class="time-chip time-15"><input id="cov15" type="checkbox" checked><span>15 min</span></label>
+        </fieldset>
+        <div class="coverage-actions"><button id="runCoverage" class="primary-action" type="button">▶ Run Coverage</button><button id="clearCoverage" class="secondary-action" type="button">↻ Clear</button></div>
+        <label class="switch-row"><input id="combineCoverage" type="checkbox"><span>Gabung liputan semua kemudahan agensi</span></label>
+        <div class="coverage-selected" id="coverageSelected"><span class="selected-pin">●</span><div><small>Kemudahan Dipilih</small><strong id="coverageSelectedName">-</strong><span id="coverageSelectedMeta">Pilih agensi dan kemudahan</span></div></div>
+        <div class="coverage-disclaimer">Zon 5/10/15 minit dalam V3.2 ialah <b>anggaran jarak perjalanan</b> tanpa API key, bukan network service area sebenar. Ia akan diganti dengan Valhalla/Network Engine SUO.</div>
+      </aside>
+
       <section class="map-wrap panel">
         <div id="map"></div>
         <div class="map-layers" aria-label="Lapisan peta">
           <div class="map-layers-title boundary-heading">Lapisan Peta</div>
           <label class="layer-toggle"><input id="toggleDistrict" type="checkbox" checked><i class="line-swatch district"></i><span>Sempadan Daerah Negeri Selangor</span></label>
           <label class="layer-toggle"><input id="togglePbt" type="checkbox" checked><i class="line-swatch pbt"></i><span>Sempadan Pihak Berkuasa Tempatan Negeri Selangor</span></label>
+        </div>
+
+        <div id="coverageLegend" class="coverage-map-legend coverage-only" hidden>
+          <strong>Liputan Indikatif</strong>
+          <span><i class="cov-swatch cov5"></i>5 min</span>
+          <span><i class="cov-swatch cov10"></i>10 min</span>
+          <span><i class="cov-swatch cov15"></i>15 min</span>
         </div>
 
         <div class="basemap-dock">
@@ -89,36 +112,58 @@
           </div>
         </div>
 
-        <div class="legend">
+        <div class="legend overview-only" id="overviewLegend">
           <span><i class="dot pdrm"></i>PDRM</span>
           <span><i class="dot jbpm"></i>JBPM</span>
           <span><i class="dot apm"></i>APM</span>
         </div>
       </section>
 
-      <aside class="panel analytics">
+      <aside class="panel analytics overview-only" id="overviewAnalytics">
         <div class="panel-title">Ringkasan Analitik</div>
         <div class="chart-box"><canvas id="agencyChart"></canvas></div>
         <div class="top-list"><h3>Kategori Utama</h3><div id="categoryList"></div></div>
       </aside>
+
+      <aside class="panel coverage-summary coverage-only" id="coverageSummary" hidden>
+        <div class="panel-title">Ringkasan Coverage</div>
+        <div class="coverage-facility-card"><small>Kemudahan / Agensi</small><strong id="covSummaryFacility">Belum dijalankan</strong><span id="covSummaryAgency">-</span></div>
+        <div class="coverage-metrics">
+          <div><small>Luas Liputan Terbesar</small><strong id="covArea">-</strong><span>km²</span></div>
+          <div><small>Daerah Terlibat</small><strong id="covDistricts">-</strong><span>daerah</span></div>
+          <div><small>PBT Terlibat</small><strong id="covPbts">-</strong><span>PBT</span></div>
+          <div><small>Kaedah</small><strong class="metric-text">Anggaran</strong><span>tanpa API key</span></div>
+        </div>
+        <div class="coverage-chart"><h3>Luas Coverage Mengikut Masa</h3><canvas id="coverageChart"></canvas></div>
+        <div class="coverage-area-list"><h3>Kawasan Terlibat</h3><div id="coverageAreaList"><p>Jalankan analisis untuk melihat Daerah dan PBT terlibat.</p></div></div>
+      </aside>
     </section>
 
-    <section class="panel table-panel">
+    <section class="panel table-panel overview-only" id="overviewTable">
       <div class="panel-title">Senarai Kemudahan <span id="tableMeta"></span></div>
       <div class="table-scroll">
         <table><thead><tr><th>Agensi</th><th>Kategori</th><th>Nama</th><th>Hierarki</th><th>Induk/Zon</th><th>Alamat</th></tr></thead><tbody id="tbody"></tbody></table>
       </div>
     </section>
+
+    <section class="panel table-panel coverage-only" id="coverageTable" hidden>
+      <div class="panel-title">Kawasan Dalam Liputan <span id="coverageTableMeta">Belum dianalisis</span></div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Jenis</th><th>Nama Kawasan</th><th>Kategori</th><th>Status</th></tr></thead><tbody id="coverageTbody"><tr><td colspan="4">Pilih parameter dan tekan Run Coverage.</td></tr></tbody></table>
+      </div>
+    </section>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-source">Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Sempadan Daerah Negeri Selangor · Sempadan Pihak Berkuasa Tempatan Negeri Selangor · Selangor Urban Observatory</div>
-    <div class="footer-version">V3.1 · 07 Sep 2026</div>
+    <div class="footer-version">V3.2 · 07 Sep 2026</div>
   </footer>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="data.js?v=3.1"></script>
-  <script src="boundaries.js?v=3.1"></script>
-  <script src="app.js?v=3.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
+  <script src="data.js?v=3.2"></script>
+  <script src="boundaries.js?v=3.2"></script>
+  <script src="app.js?v=3.2"></script>
 </body>
 </html>
