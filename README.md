@@ -1,17 +1,12 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V3.2
+# Dashboard Kemudahan Keselamatan Negeri Selangor V3.3
 
-## Coverage Analysis berfungsi
-- Tab `Coverage Analysis` kini membuka workspace sebenar.
-- Pilih Agensi dan Kemudahan.
-- Pilih zon 5 / 10 / 15 minit dan tekan `Run Coverage`.
-- Peta menjana zon liputan indikatif dan menandakan kemudahan dipilih.
-- Sistem mengira keluasan coverage dan mengenal pasti Daerah serta PBT yang bersilang dengan zon liputan.
-- Ringkasan kanan memaparkan luas, bilangan Daerah/PBT, carta keluasan mengikut masa dan senarai kawasan terlibat.
-- Jadual bawah memaparkan semua Daerah/PBT yang terlibat.
-- Pilihan `Gabung liputan semua kemudahan agensi` disediakan untuk analisis seluruh agensi.
-
-## Nota metodologi penting
-V3.2 ialah implementasi **tanpa API key** untuk GitHub Pages. Zon 5/10/15 minit menggunakan proksi jarak driving (2.5 / 5.0 / 7.5 km) dan bukan network service area / masa respons sebenar. Struktur kod disediakan supaya enjin ini boleh diganti dengan Valhalla / Network Engine SUO kemudian tanpa perlu redesign UI.
+## Perubahan V3.3
+- Dropdown `Kemudahan` dalam Coverage Analysis kini disusun mengikut hierarki kemudahan, bukan lagi abjad keseluruhan.
+- Turutan kategori: `IPK → IPD → Balai Polis → Balai Polis Marin → Balai Lapangan Terbang → Balai Komuniti → Pondok Polis → Pos Polis Komuniti → Pos Pengawal → BBP / Pejabat Zon → BBP → APM Negeri → APM Daerah`.
+- Setiap kategori dipaparkan sebagai kumpulan (`optgroup`) supaya hierarki lebih jelas semasa memilih kemudahan.
+- Nama kemudahan dalam kategori yang sama disusun secara alfabetikal.
+- Semua fungsi Coverage Analysis V3.2 dikekalkan.
+- Cache query dinaikkan kepada `?v=3.3`.
 
 ## GitHub Pages
-Upload/replace semua fail ke root repository. `index.html` mesti berada di root. Cache version telah dinaikkan kepada `?v=3.2`.
+Replace semua fail versi lama dengan kandungan folder ini. `index.html` mesti berada di root repository.

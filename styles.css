@@ -197,7 +197,7 @@ main{padding:20px 28px 12px}
 @media(max-width:720px){.module-tabs{grid-template-columns:1fr 1fr}.module-tab{min-height:44px;font-size:11px;padding:9px 10px;gap:7px}.module-tab svg{width:16px;height:16px}}
 
 
-/* V3.2 — functional Coverage Analysis workspace */
+/* V3.3 — functional Coverage Analysis workspace */
 .coverage-controls,.coverage-summary{padding:16px;overflow:auto}
 .coverage-title{display:flex;gap:9px;align-items:flex-start;margin-bottom:15px;color:#e84b22}.coverage-title-icon{font-size:23px;line-height:1}.coverage-title strong{display:block;font-size:15px}.coverage-title small{display:block;color:#8290a0;font-size:9px;margin-top:3px;font-weight:500}
 .coverage-controls>label{display:block;color:#66768a;font-size:10.5px;margin-bottom:12px}.coverage-controls select{display:block;width:100%;margin-top:5px;background:#fffefa;color:#172236;border:1px solid #dfd2c2;border-radius:9px;padding:9px 10px;font-size:11px;outline:none}

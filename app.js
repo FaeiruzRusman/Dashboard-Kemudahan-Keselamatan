@@ -310,7 +310,7 @@ function renderAnalytics(fs,counts){const ctx=document.getElementById('agencyCha
 
 
 
-// V3.2 module navigation + functional indicative Coverage Analysis.
+// V3.3 module navigation + functional indicative Coverage Analysis.
 const moduleTabs=[...document.querySelectorAll('.module-tab')];
 const overviewEls=[...document.querySelectorAll('.overview-only')];
 const coverageEls=[...document.querySelectorAll('.coverage-only')];
@@ -331,12 +331,49 @@ agencyOptions.forEach(item=>{const o=document.createElement('option');o.value=it
 coverageAgency.value='PDRM';
 
 function getFeatureLabel(f){return f?.properties?.NAMA||'-';}
-function agencyFacilities(){return features.filter(f=>f.properties.AGENSI===coverageAgency.value).sort((a,b)=>getFeatureLabel(a).localeCompare(getFeatureLabel(b),'ms'));}
+const coverageFacilityHierarchy=[
+  'IPK','IPD','BALAI POLIS','BALAI POLIS MARIN','BALAI LAPANGAN TERBANG',
+  'BALAI KOMUNITI','PONDOK POLIS','POS POLIS KOMUNITI','POS PENGAWAL',
+  'BBP / Pejabat Zon','BBP','APM Negeri','APM Daerah'
+];
+const coverageCategoryLabels={
+  'IPK':'IPK','IPD':'IPD','BALAI POLIS':'Balai Polis','BALAI POLIS MARIN':'Balai Polis Marin',
+  'BALAI LAPANGAN TERBANG':'Balai Lapangan Terbang','BALAI KOMUNITI':'Balai Komuniti',
+  'PONDOK POLIS':'Pondok Polis','POS POLIS KOMUNITI':'Pos Polis Komuniti','POS PENGAWAL':'Pos Pengawal',
+  'BBP / Pejabat Zon':'BBP / Pejabat Zon','BBP':'BBP','APM Negeri':'APM Negeri','APM Daerah':'APM Daerah'
+};
+function coverageCategoryRank(category){
+  const i=coverageFacilityHierarchy.indexOf(category);
+  return i===-1?999:i;
+}
+function agencyFacilities(){
+  return features.filter(f=>f.properties.AGENSI===coverageAgency.value).sort((a,b)=>{
+    const ar=coverageCategoryRank(a.properties.KATEGORI),br=coverageCategoryRank(b.properties.KATEGORI);
+    if(ar!==br) return ar-br;
+    return getFeatureLabel(a).localeCompare(getFeatureLabel(b),'ms',{sensitivity:'base'});
+  });
+}
 function fillCoverageFacilities(){
   const list=agencyFacilities();
   const prev=coverageFacility.value;
   coverageFacility.innerHTML='';
-  list.forEach(f=>{const o=document.createElement('option');o.value=f.properties.UID||f.properties.SRC_ID||getFeatureLabel(f);o.textContent=getFeatureLabel(f);coverageFacility.appendChild(o);});
+  const groups=new Map();
+  list.forEach(f=>{
+    const category=f.properties.KATEGORI||'Lain-lain';
+    if(!groups.has(category)) groups.set(category,[]);
+    groups.get(category).push(f);
+  });
+  [...groups.entries()].sort((a,b)=>coverageCategoryRank(a[0])-coverageCategoryRank(b[0])).forEach(([category,items])=>{
+    const group=document.createElement('optgroup');
+    group.label=coverageCategoryLabels[category]||category;
+    items.forEach(f=>{
+      const o=document.createElement('option');
+      o.value=f.properties.UID||f.properties.SRC_ID||getFeatureLabel(f);
+      o.textContent=getFeatureLabel(f);
+      group.appendChild(o);
+    });
+    coverageFacility.appendChild(group);
+  });
   if(list.some(f=>(f.properties.UID||f.properties.SRC_ID||getFeatureLabel(f))===prev)) coverageFacility.value=prev;
   updateCoverageSelectionCard();
 }
