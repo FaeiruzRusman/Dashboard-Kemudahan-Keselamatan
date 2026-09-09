@@ -1,4 +1,7 @@
 /* V3.6 — Density Analysis */
+/* Keep all four module tabs on one row on desktop/tablet. */
+.module-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important}
+.module-tab{min-width:0!important;width:100%!important;white-space:nowrap!important}
 .density-tab svg{fill:none;stroke:currentColor;stroke-width:1.8}
 .density-controls,.density-summary{padding:16px;overflow:auto}
 .density-title{display:flex;gap:10px;align-items:flex-start;margin-bottom:16px}.density-title-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#fff0e4;color:#d15d30;font-weight:900}.density-title strong{display:block;font-size:13px;color:#2b3a4e}.density-title small{display:block;margin-top:3px;color:#7d8999;font-size:9px;line-height:1.35}
@@ -11,5 +14,5 @@
 .density-map-legend{position:absolute;left:108px;bottom:12px;z-index:610;background:rgba(255,253,250,.97);border:1px solid #ead9c7;border-radius:9px;padding:8px 10px;box-shadow:0 6px 16px rgba(125,94,58,.1);font-size:8.5px;color:#4c5c6e}.density-map-legend strong{display:block;margin-bottom:6px;font-size:9px}.density-scale{display:flex;align-items:center;gap:2px}.density-scale i{display:block;width:22px;height:8px}.density-scale span{margin-left:5px;color:#798696}.density-s1{background:#fff4e8}.density-s2{background:#fbd8bb}.density-s3{background:#f3ad76}.density-s4{background:#e67842}.density-s5{background:#b94d2e}
 .density-tooltip{background:#fffdf9!important;border:1px solid #e5d8ca!important;color:#233449!important;box-shadow:0 7px 20px rgba(85,62,42,.15)!important;font-family:Inter,sans-serif;font-size:9px!important}.density-tooltip:before{display:none!important}
 .density-table-panel{margin-top:14px;padding:14px 16px 4px}.density-rank{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:22px;border-radius:999px;background:#fff0e5;color:#bd522e;font-size:9px;font-weight:800}.density-value{font-weight:800;color:#b95230}
-@media(max-width:1050px){.density-summary{grid-column:1/-1}.density-chart-wrap{height:265px}}
-@media(max-width:720px){.density-metrics{grid-template-columns:1fr 1fr}.density-map-legend{left:106px}.density-title small{font-size:8.5px}}
+@media(max-width:1050px){.density-summary{grid-column:1/-1}.density-chart-wrap{height:265px}.module-tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:720px){.density-metrics{grid-template-columns:1fr 1fr}.density-map-legend{left:106px}.density-title small{font-size:8.5px}.module-tabs{grid-template-columns:repeat(4,minmax(110px,1fr))!important;overflow-x:auto!important}.module-tab{font-size:9px!important;padding:8px 5px!important}}
