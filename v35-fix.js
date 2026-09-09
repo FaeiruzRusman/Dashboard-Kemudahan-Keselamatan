@@ -37,3 +37,17 @@
     }, 0);
   }, true);
 })();
+
+// V3.6 module loader. Kept here so the existing index.html remains backward-compatible.
+(() => {
+  if(!document.querySelector('link[href*="v36-density.css"]')){
+    const css=document.createElement('link');
+    css.rel='stylesheet'; css.href='v36-density.css?v=3.6';
+    document.head.appendChild(css);
+  }
+  if(!document.querySelector('script[src*="v36-density.js"]')){
+    const js=document.createElement('script');
+    js.src='v36-density.js?v=3.6';
+    document.body.appendChild(js);
+  }
+})();
