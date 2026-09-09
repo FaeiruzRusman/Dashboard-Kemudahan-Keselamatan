@@ -1,0 +1,5 @@
+/* V3.5 — Nearest Facility interaction state */
+#map.nearest-pick-mode,.nearest-pick-mode{cursor:crosshair!important}
+.nearest-origin-marker{width:24px;height:24px;border-radius:50% 50% 50% 0;background:#f15b32;border:3px solid #fff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(96,54,29,.35);position:relative}
+.nearest-origin-marker::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;left:6px;top:6px}
+.nearest-location-card strong{color:#c84e29}
