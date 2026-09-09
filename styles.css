@@ -186,7 +186,7 @@ main{padding:20px 28px 12px}
 
 
 /* V3.1 — module navigation inspired by SUO Coverage Analysis mockup */
-.module-tabs{display:grid;grid-template-columns:1fr 1.18fr;align-items:stretch;margin:0 0 14px;background:#fff;border:1px solid #eadbc9;border-radius:12px;box-shadow:0 5px 16px rgba(125,94,58,.07);overflow:hidden}
+.module-tabs{display:grid;grid-template-columns:1fr 1.15fr 1.05fr;align-items:stretch;margin:0 0 14px;background:#fff;border:1px solid #eadbc9;border-radius:12px;box-shadow:0 5px 16px rgba(125,94,58,.07);overflow:hidden}
 .module-tab{min-height:46px;border:0;background:transparent;color:#536176;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 16px;font-weight:700;font-size:12px;cursor:pointer;position:relative;transition:background .16s ease,color .16s ease,box-shadow .16s ease}
 .module-tab+.module-tab{border-left:1px solid #eee2d4}
 .module-tab svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -194,7 +194,7 @@ main{padding:20px 28px 12px}
 .module-tab.active{color:#e84b22;background:linear-gradient(90deg,#fff8f2,#fff1e9);box-shadow:inset 0 0 0 1px #ff7956}
 .module-tab.active::after{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:2px;border-radius:999px;background:linear-gradient(90deg,#ff6d43,#f7a037)}
 .module-tab:focus-visible{outline:3px solid rgba(240,138,36,.22);outline-offset:-3px}
-@media(max-width:720px){.module-tabs{grid-template-columns:1fr 1fr}.module-tab{min-height:44px;font-size:11px;padding:9px 10px;gap:7px}.module-tab svg{width:16px;height:16px}}
+@media(max-width:720px){.module-tabs{grid-template-columns:repeat(3,1fr)}.module-tab{min-height:44px;font-size:11px;padding:9px 10px;gap:7px}.module-tab svg{width:16px;height:16px}}
 
 
 /* V3.3 — functional Coverage Analysis workspace */
@@ -210,3 +210,17 @@ main{padding:20px 28px 12px}
 #coverageTable td:last-child{font-weight:800;color:#27994b}.coverage-status{display:inline-block;padding:3px 7px;border-radius:999px;background:#effaf1;color:#27994b;font-size:8px;font-weight:800}
 @media(max-width:1050px){.coverage-summary{grid-column:1/-1}.coverage-chart{height:230px}}
 @media(max-width:720px){.coverage-times{grid-template-columns:repeat(3,1fr)}.coverage-map-legend{right:8px;bottom:85px}.coverage-metrics{grid-template-columns:1fr 1fr}}
+
+
+/* V3.4 Nearest Facility module */
+.nearest-controls,.nearest-summary{padding:16px;overflow:auto}
+.nearest-title{display:flex;align-items:flex-start;gap:9px;margin-bottom:16px;color:#e84b22}.nearest-title-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#fff1e8;border:1px solid #f4cdb8;font-size:18px}.nearest-title strong,.nearest-title small{display:block}.nearest-title strong{font-size:15px}.nearest-title small{font-size:8.5px;color:#7f8b99;margin-top:2px;font-weight:500}
+.nearest-instruction{display:flex;gap:9px;align-items:flex-start;padding:11px;border:1px solid #f0ddca;background:#fffaf5;border-radius:10px;margin-bottom:12px}.nearest-step{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:grid;place-items:center;background:#f25b2a;color:#fff;font-weight:800;font-size:10px}.nearest-instruction p{margin:0;color:#566578;font-size:9px;line-height:1.45}.nearest-instruction b{color:#2e3d50}
+.nearest-location-card{padding:11px;border-radius:10px;border:1px solid #eadbc9;background:#fff;box-shadow:inset 3px 0 0 #f08a24}.nearest-location-card small,.nearest-location-card strong,.nearest-location-card span{display:block}.nearest-location-card small{font-size:8px;color:#8793a2}.nearest-location-card strong{font-size:11px;color:#26364a;margin:3px 0}.nearest-location-card span{font-size:8.5px;color:#68778a}
+.nearest-actions{display:flex;margin-top:10px}.nearest-actions .secondary-action{width:100%}.nearest-note{margin-top:12px;font-size:8.5px;line-height:1.5;color:#7c8795;background:#fff8f1;border:1px solid #f0dfce;border-radius:9px;padding:9px}.nearest-note b{color:#a75931}
+.nearest-map-hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:620;display:flex;align-items:center;gap:7px;background:rgba(255,253,250,.96);border:1px solid #f0d5bf;border-radius:999px;padding:7px 12px;color:#c5522d;font-size:9px;box-shadow:0 5px 15px rgba(120,88,54,.1);pointer-events:none}.nearest-map-hint span{font-size:15px}.nearest-map-hint[hidden]{display:none}
+.nearest-summary .panel-title{color:#e84b22;font-size:14px}.nearest-cards{display:grid;gap:9px}.nearest-empty{padding:18px 12px;text-align:center;color:#7e8b99;font-size:9px;background:#fffaf5;border:1px dashed #e6d2be;border-radius:10px}.nearest-agency-card{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:center;border:1px solid #eadfd3;background:#fff;border-radius:11px;padding:10px;box-shadow:0 4px 12px rgba(104,77,48,.05)}.nearest-agency-card::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--agency-color)}.nearest-agency-logo{width:44px;height:44px;object-fit:contain;padding:4px;border-radius:9px;background:#fffaf7;border:1px solid #efe2d5}.nearest-card-copy{min-width:0}.nearest-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.nearest-card-top b{font-size:10px;color:#314156}.nearest-distance{font-size:16px;font-weight:800;color:var(--agency-color);white-space:nowrap}.nearest-card-name{display:block;font-size:10px;font-weight:800;color:#1f3045;margin:3px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nearest-card-meta{display:block;color:#7a8796;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nearest-summary-note{font-size:8px;color:#8b96a3;margin-top:10px;text-align:center}
+.nearest-origin-marker{width:18px;height:18px;border-radius:50%;background:#222;border:3px solid #fff;box-shadow:0 0 0 2px #f15e2c,0 3px 8px rgba(0,0,0,.25)}
+.nearest-status{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;font-size:8px;font-weight:800;background:#fff2e8;color:#c95128;border:1px solid #f1d0bd}
+@media(max-width:1050px){.nearest-summary{grid-column:1/-1}.nearest-cards{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.module-tab{font-size:10px;padding:8px 6px}.module-tab span{white-space:nowrap}.nearest-cards{grid-template-columns:1fr}.nearest-map-hint{max-width:calc(100% - 40px);text-align:center}}

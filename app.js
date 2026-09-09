@@ -314,6 +314,7 @@ function renderAnalytics(fs,counts){const ctx=document.getElementById('agencyCha
 const moduleTabs=[...document.querySelectorAll('.module-tab')];
 const overviewEls=[...document.querySelectorAll('.overview-only')];
 const coverageEls=[...document.querySelectorAll('.coverage-only')];
+const nearestEls=[...document.querySelectorAll('.nearest-only')];
 let activeModule='overview';
 let coverageLayer=L.layerGroup().addTo(map);
 let coverageSelectedLayer=L.layerGroup().addTo(map);
@@ -446,11 +447,72 @@ document.getElementById('runCoverage').addEventListener('click',runCoverageAnaly
 function setModule(module){
   activeModule=module;
   moduleTabs.forEach(t=>{const on=t.dataset.module===module;t.classList.toggle('active',on);t.setAttribute('aria-selected',String(on));});
-  overviewEls.forEach(el=>el.hidden=module!=='overview');coverageEls.forEach(el=>el.hidden=module!=='coverage');
+  overviewEls.forEach(el=>el.hidden=module!=='overview');
+  coverageEls.forEach(el=>el.hidden=module!=='coverage');
+  nearestEls.forEach(el=>el.hidden=module!=='nearest');
   if(module==='coverage'){
+    clearNearest(false);
     clearCoverage(false);updateCoverageSelectionCard();
     const f=selectedCoverageFeature();if(f){const [lng,lat]=f.geometry.coordinates;map.setView([lat,lng],10);}
-  } else {coverageLayer.clearLayers();coverageSelectedLayer.clearLayers();map.setView([3.16,101.53],9);render();}
+  } else if(module==='nearest'){
+    coverageLayer.clearLayers();coverageSelectedLayer.clearLayers();
+    clearNearest(false);map.setView([3.16,101.53],9);
+  } else {
+    coverageLayer.clearLayers();coverageSelectedLayer.clearLayers();clearNearest(false);map.setView([3.16,101.53],9);render();
+  }
   setTimeout(()=>map.invalidateSize(),60);
 }
 moduleTabs.forEach(tab=>tab.addEventListener('click',()=>setModule(tab.dataset.module)));
+
+
+// V3.4 Nearest Facility — local geodesic analysis, no API required.
+const nearestLayer=L.layerGroup().addTo(map);
+let nearestOrigin=null;
+let nearestResults=[];
+const nearestLogos={PDRM:'assets/logos/pdrm.png',JBPM:'assets/logos/jbpm.png',APM:'assets/logos/apm.png'};
+
+function nearestForAgency(originFeature,agencyName){
+  let best=null;
+  features.filter(f=>f.properties.AGENSI===agencyName).forEach(f=>{
+    const km=turf.distance(originFeature,f,{units:'kilometers'});
+    if(!best||km<best.distance) best={feature:f,distance:km};
+  });
+  return best;
+}
+function renderNearestResults(originLatLng,results){
+  const cards=document.getElementById('nearestCards');
+  cards.innerHTML=results.map(r=>{const p=r.feature.properties;const c=agencyColors[p.AGENSI]||'#888';return `<div class="nearest-agency-card" style="--agency-color:${c}"><img class="nearest-agency-logo" src="${nearestLogos[p.AGENSI]}" alt=""><div class="nearest-card-copy"><div class="nearest-card-top"><b>${esc(p.AGENSI)}</b><span class="nearest-distance">${num(r.distance,2)} km</span></div><span class="nearest-card-name" title="${esc(p.NAMA)}">${esc(p.NAMA)}</span><span class="nearest-card-meta">${esc(p.KATEGORI||'-')} · ${esc(p.ALAMAT||'Alamat tidak tersedia')}</span></div></div>`}).join('');
+  const tbody=document.getElementById('nearestTbody');
+  tbody.innerHTML=results.map(r=>{const p=r.feature.properties;return `<tr><td><b>${esc(p.AGENSI)}</b></td><td>${esc(p.KATEGORI||'-')}</td><td>${esc(p.NAMA)}</td><td><span class="nearest-status">${num(r.distance,2)} km</span></td><td>${esc(p.ALAMAT||'-')}</td></tr>`}).join('');
+  document.getElementById('nearestTableMeta').textContent=`${results.length} agensi · lokasi ${originLatLng.lat.toFixed(5)}, ${originLatLng.lng.toFixed(5)}`;
+}
+function runNearestAt(latlng){
+  if(typeof turf==='undefined') return;
+  nearestLayer.clearLayers();
+  nearestOrigin=latlng;
+  const origin=turf.point([latlng.lng,latlng.lat]);
+  nearestResults=['PDRM','JBPM','APM'].map(a=>nearestForAgency(origin,a)).filter(Boolean);
+  const originIcon=L.divIcon({className:'',html:'<div class="nearest-origin-marker"></div>',iconSize:[22,22],iconAnchor:[11,11]});
+  L.marker(latlng,{icon:originIcon,zIndexOffset:1000}).bindTooltip('Lokasi Analisis',{direction:'top'}).addTo(nearestLayer);
+  nearestResults.forEach(r=>{
+    const [lng,lat]=r.feature.geometry.coordinates;const p=r.feature.properties;const color=agencyColors[p.AGENSI]||'#888';
+    L.polyline([[latlng.lat,latlng.lng],[lat,lng]],{color,weight:2,opacity:.72,dashArray:'6 5'}).addTo(nearestLayer);
+    L.circleMarker([lat,lng],{radius:9,color:'#fff',weight:3,fillColor:color,fillOpacity:1}).bindPopup(popup(p)).bindTooltip(`${p.AGENSI}: ${num(r.distance,2)} km`,{direction:'top'}).addTo(nearestLayer);
+  });
+  document.getElementById('nearestLocationText').textContent='Lokasi dipilih pada peta';
+  document.getElementById('nearestCoords').textContent=`${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)}`;
+  renderNearestResults(latlng,nearestResults);
+  const pts=[[latlng.lat,latlng.lng],...nearestResults.map(r=>[r.feature.geometry.coordinates[1],r.feature.geometry.coordinates[0]])];
+  map.fitBounds(pts,{padding:[45,45],maxZoom:13});
+}
+function clearNearest(resetMap=true){
+  nearestLayer.clearLayers();nearestOrigin=null;nearestResults=[];
+  const loc=document.getElementById('nearestLocationText');if(loc)loc.textContent='Belum dipilih';
+  const co=document.getElementById('nearestCoords');if(co)co.textContent='Klik pada peta untuk mula';
+  const cards=document.getElementById('nearestCards');if(cards)cards.innerHTML='<div class="nearest-empty">Klik satu lokasi pada peta untuk menjalankan analisis.</div>';
+  const tb=document.getElementById('nearestTbody');if(tb)tb.innerHTML='<tr><td colspan="5">Klik lokasi atas peta untuk mula.</td></tr>';
+  const meta=document.getElementById('nearestTableMeta');if(meta)meta.textContent='Belum dianalisis';
+  if(resetMap)map.setView([3.16,101.53],9);
+}
+map.on('click',e=>{if(activeModule==='nearest')runNearestAt(e.latlng);});
+document.getElementById('clearNearest').addEventListener('click',()=>clearNearest(true));

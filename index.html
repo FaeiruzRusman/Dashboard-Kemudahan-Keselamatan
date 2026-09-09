@@ -8,18 +8,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=3.3" />
+  <link rel="stylesheet" href="styles.css?v=3.4" />
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-brand">
-      <img class="suo-header-logo" src="assets/logos/suo.png?v=3.3" alt="Logo Selangor Urban Observatory">
+      <img class="suo-header-logo" src="assets/logos/suo.png?v=3.4" alt="Logo Selangor Urban Observatory">
       <div class="topbar-copy">
         <div class="eyebrow">SELANGOR URBAN OBSERVATORY · URBAN SAFETY INTELLIGENCE</div>
         <h1>Dashboard Kemudahan Keselamatan Negeri Selangor</h1>
       </div>
     </div>
-    <img class="topbar-skyline" src="assets/header/suo-skyline-right.png?v=3.3" alt="" aria-hidden="true">
+    <img class="topbar-skyline" src="assets/header/suo-skyline-right.png?v=3.4" alt="" aria-hidden="true">
   </header>
 
   <main>
@@ -53,6 +53,10 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg>
         <span>Coverage Analysis</span>
       </button>
+      <button class="module-tab nearest-tab" type="button" data-module="nearest" aria-selected="false" title="Nearest Facility">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="5"/><path d="m13 13 6 6M9 6v6M6 9h6"/></svg>
+        <span>Nearest Facility</span>
+      </button>
     </nav>
 
     <section class="dashboard-grid">
@@ -82,6 +86,21 @@
         <div class="coverage-disclaimer">Zon 5/10/15 minit dalam V3.3 ialah <b>anggaran jarak perjalanan</b> tanpa API key, bukan network service area sebenar. Ia akan diganti dengan Valhalla/Network Engine SUO.</div>
       </aside>
 
+      <aside class="panel nearest-controls nearest-only" id="nearestControls" hidden>
+        <div class="nearest-title"><span class="nearest-title-icon">⌖</span><div><strong>Nearest Facility</strong><small>Cari kemudahan keselamatan paling hampir</small></div></div>
+        <div class="nearest-instruction">
+          <span class="nearest-step">1</span>
+          <p><b>Klik mana-mana lokasi atas peta.</b><br>Sistem akan cari PDRM, JBPM dan APM paling hampir.</p>
+        </div>
+        <div class="nearest-location-card">
+          <small>Lokasi Analisis</small>
+          <strong id="nearestLocationText">Belum dipilih</strong>
+          <span id="nearestCoords">Klik pada peta untuk mula</span>
+        </div>
+        <div class="nearest-actions"><button id="clearNearest" class="secondary-action" type="button">↻ Clear</button></div>
+        <div class="nearest-note"><b>Kaedah V3.4:</b> jarak geodesic / garis lurus daripada lokasi klik kepada centroid fasiliti. Tidak mengambil kira rangkaian jalan atau masa perjalanan.</div>
+      </aside>
+
       <section class="map-wrap panel">
         <div id="map"></div>
         <div class="map-layers" aria-label="Lapisan peta">
@@ -95,6 +114,10 @@
           <span><i class="cov-swatch cov5"></i>5 min</span>
           <span><i class="cov-swatch cov10"></i>10 min</span>
           <span><i class="cov-swatch cov15"></i>15 min</span>
+        </div>
+
+        <div id="nearestMapHint" class="nearest-map-hint nearest-only" hidden>
+          <span>⌖</span><b>Klik lokasi atas peta untuk cari kemudahan terdekat</b>
         </div>
 
         <div class="basemap-dock">
@@ -137,6 +160,14 @@
         <div class="coverage-chart"><h3>Luas Coverage Mengikut Masa</h3><canvas id="coverageChart"></canvas></div>
         <div class="coverage-area-list"><h3>Kawasan Terlibat</h3><div id="coverageAreaList"><p>Jalankan analisis untuk melihat Daerah dan PBT terlibat.</p></div></div>
       </aside>
+
+      <aside class="panel nearest-summary nearest-only" id="nearestSummary" hidden>
+        <div class="panel-title">Kemudahan Terdekat</div>
+        <div id="nearestCards" class="nearest-cards">
+          <div class="nearest-empty">Klik satu lokasi pada peta untuk menjalankan analisis.</div>
+        </div>
+        <div class="nearest-summary-note">Jarak dipaparkan dalam kilometer berdasarkan garis lurus.</div>
+      </aside>
     </section>
 
     <section class="panel table-panel overview-only" id="overviewTable">
@@ -152,18 +183,25 @@
         <table><thead><tr><th>Jenis</th><th>Nama Kawasan</th><th>Kategori</th><th>Status</th></tr></thead><tbody id="coverageTbody"><tr><td colspan="4">Pilih parameter dan tekan Run Coverage.</td></tr></tbody></table>
       </div>
     </section>
+
+    <section class="panel table-panel nearest-only" id="nearestTable" hidden>
+      <div class="panel-title">Senarai Kemudahan Terdekat <span id="nearestTableMeta">Belum dianalisis</span></div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Agensi</th><th>Kategori</th><th>Nama Kemudahan</th><th>Jarak</th><th>Alamat</th></tr></thead><tbody id="nearestTbody"><tr><td colspan="5">Klik lokasi atas peta untuk mula.</td></tr></tbody></table>
+      </div>
+    </section>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-source">Sumber: Dataset final PDRM, JBPM & APM Negeri Selangor · Sempadan Daerah Negeri Selangor · Sempadan Pihak Berkuasa Tempatan Negeri Selangor · Selangor Urban Observatory</div>
-    <div class="footer-version">V3.3 · 07 Sep 2026</div>
+    <div class="footer-version">V3.4 · 09 Sep 2026</div>
   </footer>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
-  <script src="data.js?v=3.3"></script>
-  <script src="boundaries.js?v=3.3"></script>
-  <script src="app.js?v=3.3"></script>
+  <script src="data.js?v=3.4"></script>
+  <script src="boundaries.js?v=3.4"></script>
+  <script src="app.js?v=3.4"></script>
 </body>
 </html>

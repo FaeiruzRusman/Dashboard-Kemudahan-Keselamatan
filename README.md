@@ -1,12 +1,13 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V3.3
+# Dashboard Kemudahan Keselamatan Negeri Selangor V3.4
 
-## Perubahan V3.3
-- Dropdown `Kemudahan` dalam Coverage Analysis kini disusun mengikut hierarki kemudahan, bukan lagi abjad keseluruhan.
-- Turutan kategori: `IPK → IPD → Balai Polis → Balai Polis Marin → Balai Lapangan Terbang → Balai Komuniti → Pondok Polis → Pos Polis Komuniti → Pos Pengawal → BBP / Pejabat Zon → BBP → APM Negeri → APM Daerah`.
-- Setiap kategori dipaparkan sebagai kumpulan (`optgroup`) supaya hierarki lebih jelas semasa memilih kemudahan.
-- Nama kemudahan dalam kategori yang sama disusun secara alfabetikal.
-- Semua fungsi Coverage Analysis V3.2 dikekalkan.
-- Cache query dinaikkan kepada `?v=3.3`.
+## Perubahan V3.4
+- Modul baharu **Nearest Facility** ditambah sebagai tab ketiga.
+- Klik mana-mana lokasi atas peta untuk mencari kemudahan **PDRM, JBPM dan APM paling hampir**.
+- Menggunakan pengiraan geodesic / garis lurus secara lokal dalam browser melalui Turf.js.
+- Papar nama, kategori, jarak dan alamat bagi setiap agensi.
+- Peta menarik garis ke setiap kemudahan terdekat dan highlight marker.
+- Hasil turut dipaparkan dalam jadual **Senarai Kemudahan Terdekat**.
+- Tidak memerlukan API key atau server tambahan.
+- Semua fungsi Overview dan Coverage Analysis V3.3 dikekalkan.
 
-## GitHub Pages
-Replace semua fail versi lama dengan kandungan folder ini. `index.html` mesti berada di root repository.
+> Nota: Jarak V3.4 ialah jarak garis lurus, bukan jarak atau masa perjalanan melalui rangkaian jalan.
