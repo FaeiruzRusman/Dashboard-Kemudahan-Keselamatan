@@ -1,13 +1,11 @@
-# Dashboard Kemudahan Keselamatan Negeri Selangor V3.4
+# Dashboard Kemudahan Keselamatan Negeri Selangor V3.5
 
-## Perubahan V3.4
-- Modul baharu **Nearest Facility** ditambah sebagai tab ketiga.
-- Klik mana-mana lokasi atas peta untuk mencari kemudahan **PDRM, JBPM dan APM paling hampir**.
-- Menggunakan pengiraan geodesic / garis lurus secara lokal dalam browser melalui Turf.js.
-- Papar nama, kategori, jarak dan alamat bagi setiap agensi.
-- Peta menarik garis ke setiap kemudahan terdekat dan highlight marker.
-- Hasil turut dipaparkan dalam jadual **Senarai Kemudahan Terdekat**.
-- Tidak memerlukan API key atau server tambahan.
-- Semua fungsi Overview dan Coverage Analysis V3.3 dikekalkan.
+## Fix V3.5 — Nearest Facility
+- Membetulkan pemilihan lokasi apabila klik peta dalam tab **Nearest Facility**.
+- Menambah fallback click handler supaya klik pada layer/marker peta tetap boleh dijadikan lokasi analisis.
+- Map menggunakan cursor crosshair apabila modul Nearest Facility aktif.
+- Marker lokasi analisis dibuat lebih jelas.
+- Klik pada control map, basemap gallery dan panel lapisan tidak akan dianggap sebagai lokasi analisis.
+- Semua fungsi V3.4 dikekalkan.
 
-> Nota: Jarak V3.4 ialah jarak garis lurus, bukan jarak atau masa perjalanan melalui rangkaian jalan.
+> Nota: Jarak Nearest Facility masih menggunakan jarak geodesic / garis lurus, bukan jarak atau masa perjalanan melalui rangkaian jalan.
