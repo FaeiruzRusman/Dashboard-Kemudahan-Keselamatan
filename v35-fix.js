@@ -51,3 +51,16 @@
     document.body.appendChild(js);
   }
 })();
+
+// V3.6.1 — keep dynamically-added Density Analysis tab state consistent
+// with the original Overview / Coverage / Nearest tabs.
+document.addEventListener('click', ev => {
+  const clickedTab = ev.target.closest('.module-tab');
+  if(!clickedTab) return;
+
+  const densityTab = document.querySelector('.module-tab.density-tab');
+  if(densityTab && clickedTab !== densityTab){
+    densityTab.classList.remove('active');
+    densityTab.setAttribute('aria-selected','false');
+  }
+});
