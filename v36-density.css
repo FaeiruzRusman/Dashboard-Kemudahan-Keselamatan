@@ -21,3 +21,28 @@
 .module-tab{flex:1 1 0;min-width:0;white-space:nowrap}
 @media(max-width:1050px){.density-summary{grid-column:1/-1}.density-chart-wrap{height:265px}}
 @media(max-width:720px){.density-metrics{grid-template-columns:1fr 1fr}.density-map-legend{left:106px}.density-title small{font-size:8.5px}.module-tab{flex:0 0 auto;min-width:145px}}
+
+
+/* Click-to-zoom facility names in Overview table */
+.facility-name-link{
+  appearance:none;
+  border:0;
+  background:transparent;
+  padding:0;
+  margin:0;
+  color:#315f8d;
+  font:inherit;
+  font-weight:600;
+  text-align:left;
+  cursor:pointer;
+  text-decoration:none;
+}
+.facility-name-link:hover{
+  color:#d35d31;
+  text-decoration:underline;
+}
+.facility-name-link:focus-visible{
+  outline:2px solid #e9782b;
+  outline-offset:2px;
+  border-radius:3px;
+}
