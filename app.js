@@ -251,9 +251,8 @@ function syncKpiActiveState(){
 function selectAgencyFromKpi(agencyValue){
   // KPI shortcut is intended to show the complete selected agency.
   agency.value=agencyValue;
-  category.value='';
-  hierarchy.value='';
   search.value='';
+  refreshDependentFilters({resetCategory:true,resetHierarchy:true});
   render();
 }
 
@@ -297,16 +296,59 @@ const hierarchyOptions=[
   {value:'BALAI',label:'Balai'},
   {value:'BALAI/UNIT',label:'Balai/Unit'}
 ];
-function fillOrdered(sel,vals){vals.forEach(item=>{const o=document.createElement('option');o.value=item.value;o.textContent=item.label;sel.appendChild(o);});}
+function fillOrdered(sel,vals){
+  vals.forEach(item=>{
+    const o=document.createElement('option');
+    o.value=item.value;
+    o.textContent=item.label;
+    sel.appendChild(o);
+  });
+}
+function refillSelect(sel,placeholder,items,currentValue=''){
+  sel.innerHTML='';
+  const first=document.createElement('option');
+  first.value='';
+  first.textContent=placeholder;
+  sel.appendChild(first);
+  fillOrdered(sel,items);
+  if(items.some(i=>i.value===currentValue)) sel.value=currentValue;
+}
+function availableFeaturesForAgency(){
+  return features.filter(f=>!agency.value||f.properties.AGENSI===agency.value);
+}
+function refreshDependentFilters({resetCategory=false,resetHierarchy=false}={}){
+  const agencyFs=availableFeaturesForAgency();
+
+  const validCategories=new Set(agencyFs.map(f=>f.properties.KATEGORI).filter(Boolean));
+  const catItems=categoryOptions.filter(i=>validCategories.has(i.value));
+  const oldCategory=resetCategory?'':category.value;
+  refillSelect(category,'Semua Kategori',catItems,oldCategory);
+
+  const hierarchyBase=agencyFs.filter(f=>!category.value||f.properties.KATEGORI===category.value);
+  const validHierarchies=new Set(hierarchyBase.map(f=>f.properties.HIERARKI).filter(Boolean));
+  const hierarchyItems=hierarchyOptions.filter(i=>validHierarchies.has(i.value));
+  const oldHierarchy=resetHierarchy?'':hierarchy.value;
+  refillSelect(hierarchy,'Semua Hierarki',hierarchyItems,oldHierarchy);
+}
 fillOrdered(agency,agencyOptions);
-fillOrdered(category,categoryOptions);
-fillOrdered(hierarchy,hierarchyOptions);
+refreshDependentFilters();
 function filtered(){const q=search.value.trim().toLowerCase();return features.filter(f=>{const p=f.properties;return(!agency.value||p.AGENSI===agency.value)&&(!category.value||p.KATEGORI===category.value)&&(!hierarchy.value||p.HIERARKI===hierarchy.value)&&(!q||[p.NAMA,p.ALAMAT,p.INDUK,p.ZON].some(v=>String(v||'').toLowerCase().includes(q)));});}
 function popup(p){return `<div class="pop-title">${esc(p.NAMA)}</div><div><b>${esc(p.AGENSI)}</b> · ${esc(p.KATEGORI||'-')}</div><div class="pop-muted">Hierarki: ${esc(p.HIERARKI||'-')}<br>Induk/Zon: ${esc(p.INDUK||p.ZON||'-')}<br>Alamat: ${esc(p.ALAMAT||'Tiada maklumat')}<br>Telefon: ${esc(p.TELEFON||'-')}<br>Koordinat: ${Number(p.LATITUDE).toFixed(6)}, ${Number(p.LONGITUDE).toFixed(6)}</div>`;}
 function render(){const fs=filtered(); layer.clearLayers(); const bounds=[];fs.forEach(f=>{const [lng,lat]=f.geometry.coordinates;const p=f.properties;const m=L.circleMarker([lat,lng],{radius:6,weight:1,color:'#07111f',fillColor:agencyColors[p.AGENSI]||'#aaa',fillOpacity:.92});m.bindPopup(popup(p));m.addTo(layer);bounds.push([lat,lng]);});if(fs.length&&fs.length<features.length) map.fitBounds(bounds,{padding:[30,30],maxZoom:13});document.getElementById('visibleCount').textContent=fs.length;document.getElementById('tableMeta').textContent=`${fs.length} / ${features.length} rekod`;const counts={PDRM:0,JBPM:0,APM:0};fs.forEach(f=>counts[f.properties.AGENSI]=(counts[f.properties.AGENSI]||0)+1);document.getElementById('kTotal').textContent=fs.length;document.getElementById('kPdrm').textContent=counts.PDRM||0;document.getElementById('kJbpm').textContent=counts.JBPM||0;document.getElementById('kApm').textContent=counts.APM||0;syncKpiActiveState();renderTable(fs);renderAnalytics(fs,counts);}
 function renderTable(fs){const tb=document.getElementById('tbody');tb.innerHTML=fs.slice(0,250).map(f=>{const p=f.properties;return `<tr><td>${esc(p.AGENSI)}</td><td>${esc(p.KATEGORI||'-')}</td><td>${esc(p.NAMA)}</td><td>${esc(p.HIERARKI||'-')}</td><td>${esc(p.INDUK||p.ZON||'-')}</td><td>${esc(p.ALAMAT||'-')}</td></tr>`}).join('');}
 function renderAnalytics(fs,counts){const ctx=document.getElementById('agencyChart'); if(chart) chart.destroy();chart=new Chart(ctx,{type:'doughnut',data:{labels:['PDRM','JBPM','APM'],datasets:[{data:[counts.PDRM||0,counts.JBPM||0,counts.APM||0],backgroundColor:[agencyColors.PDRM,agencyColors.JBPM,agencyColors.APM],borderColor:'#fffdf9',borderWidth:3}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#5f6d80',boxWidth:10,font:{size:10}}}}}});const cc={};fs.forEach(f=>{const c=f.properties.KATEGORI||'Tidak Dinyatakan';cc[c]=(cc[c]||0)+1});document.getElementById('categoryList').innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([k,v])=>`<div class="cat-row"><span>${esc(k)}</span><strong>${v}</strong></div>`).join('');}
-[agency,category,hierarchy].forEach(el=>el.addEventListener('change',render));search.addEventListener('input',render);document.getElementById('resetBtn').addEventListener('click',()=>{agency.value='';category.value='';hierarchy.value='';search.value='';map.setView([3.16,101.53],9);render();});render();
+agency.addEventListener('change',()=>{refreshDependentFilters({resetCategory:true,resetHierarchy:true});render();});
+category.addEventListener('change',()=>{refreshDependentFilters({resetHierarchy:true});render();});
+hierarchy.addEventListener('change',render);
+search.addEventListener('input',render);
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  agency.value='';
+  search.value='';
+  refreshDependentFilters({resetCategory:true,resetHierarchy:true});
+  map.setView([3.16,101.53],9);
+  render();
+});
+render();
 
 
 
