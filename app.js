@@ -335,7 +335,53 @@ refreshDependentFilters();
 function filtered(){const q=search.value.trim().toLowerCase();return features.filter(f=>{const p=f.properties;return(!agency.value||p.AGENSI===agency.value)&&(!category.value||p.KATEGORI===category.value)&&(!hierarchy.value||p.HIERARKI===hierarchy.value)&&(!q||[p.NAMA,p.ALAMAT,p.INDUK,p.ZON].some(v=>String(v||'').toLowerCase().includes(q)));});}
 function popup(p){return `<div class="pop-title">${esc(p.NAMA)}</div><div><b>${esc(p.AGENSI)}</b> · ${esc(p.KATEGORI||'-')}</div><div class="pop-muted">Hierarki: ${esc(p.HIERARKI||'-')}<br>Induk/Zon: ${esc(p.INDUK||p.ZON||'-')}<br>Alamat: ${esc(p.ALAMAT||'Tiada maklumat')}<br>Telefon: ${esc(p.TELEFON||'-')}<br>Koordinat: ${Number(p.LATITUDE).toFixed(6)}, ${Number(p.LONGITUDE).toFixed(6)}</div>`;}
 function render(){const fs=filtered(); layer.clearLayers(); const bounds=[];fs.forEach(f=>{const [lng,lat]=f.geometry.coordinates;const p=f.properties;const m=L.circleMarker([lat,lng],{radius:6,weight:1,color:'#07111f',fillColor:agencyColors[p.AGENSI]||'#aaa',fillOpacity:.92});m.bindPopup(popup(p));m.addTo(layer);bounds.push([lat,lng]);});if(fs.length&&fs.length<features.length) map.fitBounds(bounds,{padding:[30,30],maxZoom:13});document.getElementById('visibleCount').textContent=fs.length;document.getElementById('tableMeta').textContent=`${fs.length} / ${features.length} rekod`;const counts={PDRM:0,JBPM:0,APM:0};fs.forEach(f=>counts[f.properties.AGENSI]=(counts[f.properties.AGENSI]||0)+1);document.getElementById('kTotal').textContent=fs.length;document.getElementById('kPdrm').textContent=counts.PDRM||0;document.getElementById('kJbpm').textContent=counts.JBPM||0;document.getElementById('kApm').textContent=counts.APM||0;syncKpiActiveState();renderTable(fs);renderAnalytics(fs,counts);}
-function renderTable(fs){const tb=document.getElementById('tbody');tb.innerHTML=fs.slice(0,250).map(f=>{const p=f.properties;return `<tr><td>${esc(p.AGENSI)}</td><td>${esc(p.KATEGORI||'-')}</td><td>${esc(p.NAMA)}</td><td>${esc(p.HIERARKI||'-')}</td><td>${esc(p.INDUK||p.ZON||'-')}</td><td>${esc(p.ALAMAT||'-')}</td></tr>`}).join('');}
+function renderTable(fs){
+  const tb=document.getElementById('tbody');
+  tb.innerHTML=fs.slice(0,250).map((f,i)=>{
+    const p=f.properties;
+    const [lng,lat]=f.geometry.coordinates;
+    return `<tr>
+      <td>${esc(p.AGENSI)}</td>
+      <td>${esc(p.KATEGORI||'-')}</td>
+      <td><button type="button" class="facility-name-link" data-lat="${lat}" data-lng="${lng}" data-name="${esc(p.NAMA)}">${esc(p.NAMA)}</button></td>
+      <td>${esc(p.HIERARKI||'-')}</td>
+      <td>${esc(p.INDUK||p.ZON||'-')}</td>
+      <td>${esc(p.ALAMAT||'-')}</td>
+    </tr>`;
+  }).join('');
+}
+document.getElementById('tbody').addEventListener('click',e=>{
+  const btn=e.target.closest('.facility-name-link');
+  if(!btn) return;
+  const lat=Number(btn.dataset.lat), lng=Number(btn.dataset.lng);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)) return;
+
+  map.setView([lat,lng],15,{animate:true});
+
+  let opened=false;
+  layer.eachLayer(m=>{
+    if(opened||!m.getLatLng) return;
+    const ll=m.getLatLng();
+    if(Math.abs(ll.lat-lat)<1e-7 && Math.abs(ll.lng-lng)<1e-7){
+      m.openPopup();
+      opened=true;
+    }
+  });
+
+  if(!opened){
+    const f=features.find(x=>{
+      const c=x.geometry?.coordinates||[];
+      return Math.abs(Number(c[1])-lat)<1e-7 && Math.abs(Number(c[0])-lng)<1e-7;
+    });
+    if(f){
+      L.popup()
+        .setLatLng([lat,lng])
+        .setContent(popup(f.properties))
+        .openOn(map);
+    }
+  }
+});
+
 function renderAnalytics(fs,counts){const ctx=document.getElementById('agencyChart'); if(chart) chart.destroy();chart=new Chart(ctx,{type:'doughnut',data:{labels:['PDRM','JBPM','APM'],datasets:[{data:[counts.PDRM||0,counts.JBPM||0,counts.APM||0],backgroundColor:[agencyColors.PDRM,agencyColors.JBPM,agencyColors.APM],borderColor:'#fffdf9',borderWidth:3}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#5f6d80',boxWidth:10,font:{size:10}}}}}});const cc={};fs.forEach(f=>{const c=f.properties.KATEGORI||'Tidak Dinyatakan';cc[c]=(cc[c]||0)+1});document.getElementById('categoryList').innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([k,v])=>`<div class="cat-row"><span>${esc(k)}</span><strong>${v}</strong></div>`).join('');}
 agency.addEventListener('change',()=>{refreshDependentFilters({resetCategory:true,resetHierarchy:true});render();});
 category.addEventListener('change',()=>{refreshDependentFilters({resetHierarchy:true});render();});
